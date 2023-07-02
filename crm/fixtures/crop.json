@@ -1,0 +1,18 @@
+[
+  {
+    "model": "crm.crop",
+    "pk": 1,
+    "fields": {
+      "name": "レタス",
+      "created_at": "2022-08-13T00:00:00+09:00"
+    }
+  },
+  {
+    "model": "crm.crop",
+    "pk": 2,
+    "fields": {
+      "name": "ほうれん草",
+      "created_at": "2022-08-13T00:00:00+09:00"
+    }
+  }
+]

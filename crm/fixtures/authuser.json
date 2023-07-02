@@ -1,0 +1,48 @@
+[
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "username": "岡田義隆",
+      "password": "pbkdf2_sha256$260000$zQMHsE8QsEMv4RjM8MjCRa$WjtpNnTPwNtpKWwtvrCdsiY0lLoj6H0EMqF6wzNbs7w=",
+      "first_name": "yoshitaka",
+      "last_name": "okada",
+      "email": "okada@example.com",
+      "is_staff": 1
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 2,
+    "fields": {
+      "username": "南吉行",
+      "password": "pbkdf2_sha256$260000$zQMHsE8QsEMv4RjM8MjCRa$WjtpNnTPwNtpKWwtvrCdsiY0lLoj6H0EMqF6wzNbs7w=",
+      "first_name": "yoshiyuki",
+      "last_name": "minami",
+      "email": "minami@example.com",
+      "is_staff": 1
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 3,
+    "fields": {
+      "username": "Ａ生産者",
+      "password": "pbkdf2_sha256$260000$XfU67uzr4Q0HjEjr23I57V$2y1GrUklxqN53BY4EUL2U/1GCrMF8uqE2I6fVcnvnWw=",
+      "first_name": "John",
+      "last_name": "Doe",
+      "email": "john@example.com"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 4,
+    "fields": {
+      "username": "Ｂ生産者",
+      "password": "pbkdf2_sha256$260000$zQMHsE8QsEMv4RjM8MjCRa$WjtpNnTPwNtpKWwtvrCdsiY0lLoj6H0EMqF6wzNbs7w=",
+      "first_name": "Jane",
+      "last_name": "Smith",
+      "email": "jane@example.com"
+    }
+  }
+]

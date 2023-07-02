@@ -1,0 +1,18 @@
+[
+  {
+    "model": "crm.companycategory",
+    "pk": 1,
+    "fields": {
+      "name": "農業法人",
+      "created_at": "2022-08-13T00:00:00+09:00"
+    }
+  },
+  {
+    "model": "crm.companycategory",
+    "pk": 2,
+    "fields": {
+      "name": "分析機関",
+      "created_at": "2022-08-13T00:00:00+09:00"
+    }
+  }
+]

@@ -1,0 +1,18 @@
+[
+  {
+    "model": "crm.cultivationtype",
+    "pk": 1,
+    "fields": {
+      "name": "露地",
+      "created_at": "2022-08-13T00:00:00+09:00"
+    }
+  },
+  {
+    "model": "crm.cultivationtype",
+    "pk": 2,
+    "fields": {
+      "name": "ビニールハウス",
+      "created_at": "2022-08-13T00:00:00+09:00"
+    }
+  }
+]
