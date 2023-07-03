@@ -232,8 +232,8 @@ class SoilHardnessMeasurement(models.Model):
     """
     土壌硬度測定 生データ
     """
-    device = models.ForeignKey(Device, on_delete=models.CASCADE)
-    memory = models.IntegerField()
+    setdevice = models.ForeignKey(Device, on_delete=models.CASCADE)
+    setmemory = models.IntegerField()
     setdatetime = models.DateTimeField()
     setdepth = models.IntegerField()
     setspring = models.IntegerField()
@@ -247,8 +247,8 @@ class SoilHardnessMeasurement(models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=["device", "memory", "setdatetime", "depth"],
-                name="device_memory_setdatetime_depth_unique"
+                fields=["setdevice", "setmemory", "setdatetime", "depth"],
+                name="setdevice_setmemory_setdatetime_depth_unique"
             ),
         ]
 

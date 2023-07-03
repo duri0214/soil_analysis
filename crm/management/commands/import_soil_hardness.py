@@ -10,27 +10,43 @@ from django.core.management.base import BaseCommand
 from crm.models import SoilHardnessMeasurement, SoilHardnessMeasurementImportErrors, Device
 
 
-def extract_device(line: str) -> str:
-    if line.strip()[:4] != 'DIK-':
-        raise ValueError(f"Invalid device format: {line}")
-    return line
+def extract_setdevice(line: list) -> str:
+    valuename = line[1].strip()
+    if valuename != 'Digital Cone Penetrometer':
+        raise ValueError(f"unexpected data row: {valuename}")
+
+    value = line[0].strip()
+    if not value.startswith('DIK-'):
+        raise ValueError(f"unexpected devicename: {value}")
+
+    return value
 
 
-def extract_setdatetime(line: str) -> datetime:
+def extract_setdatetime(line: list) -> datetime:
+    valuename = line[0].strip()
+    if valuename != 'Date and Time':
+        raise ValueError(f"unexpected data row: {valuename}")
+
+    value = line[1].strip()
     try:
-        temp = datetime.strptime(line.strip(), "%y.%m.%d %H:%M:%S")
-        temp = pytz.timezone('Asia/Tokyo').localize(temp)
+        value = pytz.timezone('Asia/Tokyo').localize(datetime.strptime(value, "%y.%m.%d %H:%M:%S"))
     except ValueError:
-        raise ValueError(f"setdatetimeの値をdatetimeに変換できませんでした: {line}")
-    return temp
+        raise ValueError(f"unexpected datetime: {value}")
+
+    return value
 
 
-def extract_numeric_value(line: str, value_name: str) -> int:
+def extract_numeric_value(line: list) -> int:
+    valuename = line[0].strip()
+    if not any(valuename.startswith(prefix) for prefix in ('Memory No.', 'Set Depth', 'Spring', 'Cone')):
+        raise ValueError(f"unexpected data row: {valuename}")
+
+    value = line[1].strip()
     try:
-        temp = int(line.strip())
+        value = int(value)
     except ValueError:
-        raise ValueError(f"{value_name}の値をintに変換できませんでした: {line}")
-    return temp
+        raise ValueError(f"unexpected numeric value: {value}")
+    return value
 
 
 class Command(BaseCommand):
@@ -52,22 +68,22 @@ class Command(BaseCommand):
                     reader = csv.reader(f)
 
                     # 1行目～10行目 から属性情報を取得
-                    device = m_device[extract_device(next(reader)[0])]
-                    memory = extract_numeric_value(next(reader)[1], 'memory')
+                    setdevice = m_device[extract_setdevice(next(reader))]
+                    setmemory = extract_numeric_value(next(reader))
                     next(reader)  # skip Latitude
                     next(reader)  # skip Longitude
-                    setdepth = extract_numeric_value(next(reader)[1], 'setdepth')
-                    setdatetime = extract_setdatetime(next(reader)[1])
-                    setspring = extract_numeric_value(next(reader)[1], 'setspring')
-                    setcone = extract_numeric_value(next(reader)[1], 'setcone')
+                    setdepth = extract_numeric_value(next(reader))
+                    setdatetime = extract_setdatetime(next(reader))
+                    setspring = extract_numeric_value(next(reader))
+                    setcone = extract_numeric_value(next(reader))
                     next(reader)  # skip blank line
                     next(reader)  # skip header line
 
                     # 11行目以降のデータを保存
                     for row in reader:
                         SoilHardnessMeasurement.objects.create(
-                            device=device,
-                            memory=memory,
+                            setdevice=setdevice,
+                            setmemory=setmemory,
                             setdatetime=setdatetime,
                             setdepth=setdepth,
                             setspring=setspring,
@@ -83,7 +99,8 @@ class Command(BaseCommand):
                     message=str(e),
                 )
                 self.stderr.write(self.style.ERROR(
-                    f'Error occurred while importing soil hardness measurements from {parent_folder}/{os.path.basename(csv_file)}: {str(e)}'))
+                    f'Error occurred while importing soil hardness measurements '
+                    f'from {parent_folder}/{os.path.basename(csv_file)}: {str(e)}'))
 
         self.stdout.write(self.style.SUCCESS(
             'Successfully imported all soil hardness measurements from CSV files.'))
