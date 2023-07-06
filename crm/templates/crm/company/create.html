@@ -4,8 +4,9 @@
 {% block header %}
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'crm:company_list' %}">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Company Create</li>
+            <li class="breadcrumb-item"><a href="{% url 'crm:home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'crm:company_list' %}">Company list</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Create</li>
         </ol>
     </nav>
 {% endblock %}
