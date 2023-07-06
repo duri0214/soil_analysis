@@ -56,6 +56,14 @@ class Command(BaseCommand):
         parser.add_argument('folder_path', type=str, help='Folder path containing CSV files')
 
     def handle(self, *args, **options):
+        folder_path = options['folder_path']
+        try:
+            if not folder_path or not os.path.exists(folder_path):
+                raise ValueError(f'Folder path does not exist: {folder_path}')
+        except ValueError as e:
+            self.stderr.write(self.style.ERROR(str(e)))
+            return
+
         SoilHardnessMeasurementImportErrors.objects.all().delete()
         csv_files = glob.glob(os.path.join(options['folder_path'], '**/*.csv'), recursive=True)
         m_device = {device.name: device for device in Device.objects.all()}
