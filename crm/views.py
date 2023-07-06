@@ -1,10 +1,14 @@
 from django.db.models import Avg
 from django.urls import reverse
-from django.views.generic import ListView, CreateView, DetailView
+from django.views.generic import ListView, CreateView, DetailView, TemplateView
 
 from .domain.graph.graph_matplotlib import GraphMatplotlib
 from .forms import CompanyCreateForm, LandCreateForm
 from .models import Company, Land, LandScoreChemical, LandReview, CompanyCategory, Ledger
+
+
+class Home(TemplateView):
+    template_name = "crm/home.html"
 
 
 class CompanyListView(ListView):
@@ -70,7 +74,7 @@ class LandDetailView(DetailView):
 
 class LandReportChemicalListView(ListView):
     model = LandScoreChemical
-    template_name = "crm/landreportchemical/list.html"
+    template_name = "crm/landreport/chemical.html"
 
     def get_queryset(self):
         return super().get_queryset().filter(land=self.kwargs['land_id'])
