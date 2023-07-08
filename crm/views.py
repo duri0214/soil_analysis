@@ -1,4 +1,5 @@
 import os
+import shutil
 
 from django.core.management import call_command
 from django.db.models import Avg
@@ -165,6 +166,7 @@ class UploadSoilhardnessView(FormView):
         upload_folder = ZipFileProcessor.handle_uploaded_zip(self.request.FILES['zipfile'])
         if os.path.exists(upload_folder):
             call_command('import_soil_hardness', upload_folder)
+            shutil.rmtree(upload_folder)
 
         return super().form_valid(form)
 
