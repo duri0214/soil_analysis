@@ -1,10 +1,14 @@
-from django.db.models import Avg
-from django.urls import reverse
-from django.views.generic import ListView, CreateView, DetailView, TemplateView
+import os
 
-from .domain.graph.graph_matplotlib import GraphMatplotlib
-from .forms import CompanyCreateForm, LandCreateForm
-from .models import Company, Land, LandScoreChemical, LandReview, CompanyCategory, Ledger
+from django.core.management import call_command
+from django.db.models import Avg
+from django.urls import reverse, reverse_lazy
+from django.views.generic import ListView, CreateView, DetailView, TemplateView, FormView
+
+from crm.domain.graph.graph_matplotlib import GraphMatplotlib
+from crm.domain.valueobject.zipfileprocessor import ZipFileProcessor
+from crm.forms import CompanyCreateForm, LandCreateForm, UploadZipForm
+from crm.models import Company, Land, LandScoreChemical, LandReview, CompanyCategory, Ledger
 
 
 class Home(TemplateView):
@@ -149,3 +153,21 @@ class LandReportChemicalListView(ListView):
         context['land_review'] = land_review
 
         return context
+
+
+class UploadSoilhardnessView(FormView):
+    template_name = 'crm/soilhardness/upload.html'
+    form_class = UploadZipForm
+    success_url = reverse_lazy('crm:upload_soilhardness_success')
+
+    def form_valid(self, form):
+        # Zipを処理してバッチ実行
+        upload_folder = ZipFileProcessor.handle_uploaded_zip(self.request.FILES['zipfile'])
+        if os.path.exists(upload_folder):
+            call_command('import_soil_hardness', upload_folder)
+
+        return super().form_valid(form)
+
+
+class UploadZipSuccessView(TemplateView):
+    template_name = 'crm/soilhardness/success.html'

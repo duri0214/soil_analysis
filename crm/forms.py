@@ -63,3 +63,7 @@ class LandCreateForm(forms.ModelForm):
             raise forms.ValidationError('「あの圃場」を含む圃場名は登録できなくなりました（あいまい）')
 
         return name
+
+
+class UploadZipForm(forms.Form):
+    zipfile = forms.FileField()
