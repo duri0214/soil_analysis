@@ -9,7 +9,8 @@ from django.views.generic import ListView, CreateView, DetailView, TemplateView,
 from crm.domain.graph.graph_matplotlib import GraphMatplotlib
 from crm.domain.valueobject.zipfileprocessor import ZipFileProcessor
 from crm.forms import CompanyCreateForm, LandCreateForm, UploadZipForm
-from crm.models import Company, Land, LandScoreChemical, LandReview, CompanyCategory, Ledger
+from crm.models import Company, Land, LandScoreChemical, LandReview, CompanyCategory, Ledger, \
+    SoilHardnessMeasurementImportErrors
 
 
 class Home(TemplateView):
@@ -173,3 +174,8 @@ class UploadSoilhardnessView(FormView):
 
 class UploadZipSuccessView(TemplateView):
     template_name = 'crm/soilhardness/success.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['import_errors'] = SoilHardnessMeasurementImportErrors.objects.all()
+        return context

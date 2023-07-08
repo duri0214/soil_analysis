@@ -6,6 +6,7 @@ from datetime import datetime
 import pytz
 
 from django.core.management.base import BaseCommand
+from django.db import IntegrityError
 
 from crm.models import SoilHardnessMeasurement, SoilHardnessMeasurementImportErrors, Device
 
@@ -100,6 +101,20 @@ class Command(BaseCommand):
                             pressure=int(row[1]),
                             csvfolder=parent_folder,
                         )
+
+            except IntegrityError as e:
+                if 'duplicate entry' in str(e).lower():
+                    SoilHardnessMeasurementImportErrors.objects.create(
+                        csvfile=os.path.basename(csv_file),
+                        csvfolder=parent_folder,
+                        message='取り込み済み',
+                    )
+                    self.stderr.write(self.style.WARNING(
+                        f'Duplicate entry detected: {parent_folder}/{os.path.basename(csv_file)}. '
+                        f'Skipping import.'))
+                else:
+                    raise e
+
             except Exception as e:
                 SoilHardnessMeasurementImportErrors.objects.create(
                     csvfile=os.path.basename(csv_file),
