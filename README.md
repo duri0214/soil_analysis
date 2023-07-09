@@ -17,13 +17,14 @@ python manage.py loaddata .\crm\fixtures\companycategory.json
 python manage.py loaddata .\crm\fixtures\company.json
 python manage.py loaddata .\crm\fixtures\authuser.json
 python manage.py loaddata .\crm\fixtures\crop.json
-python manage.py loaddata .\crm\fixtures\area.json
-python manage.py loaddata .\crm\fixtures\period.json
+python manage.py loaddata .\crm\fixtures\landblock.json
+python manage.py loaddata .\crm\fixtures\landperiod.json
 python manage.py loaddata .\crm\fixtures\cultivationtype.json
 python manage.py loaddata .\crm\fixtures\land.json
-python manage.py loaddata .\crm\fixtures\landreview.json
 python manage.py loaddata .\crm\fixtures\samplingmethod.json
-python manage.py loaddata .\crm\fixtures\ledger.json
+python manage.py loaddata .\crm\fixtures\landledger.json
+python manage.py loaddata .\crm\fixtures\landreview.json
+python manage.py loaddata .\crm\fixtures\landledgerdetail.json
 python manage.py loaddata .\crm\fixtures\landscorechemical.json
 python manage.py loaddata .\crm\fixtures\device.json
 ```
