@@ -1,5 +1,6 @@
 {% extends "crm/base.html" %}
 {% load static %}
+{% load custom_filters %}
 {% block css %}
     <link rel="stylesheet" href="{% static 'crm/css/land/list.css' %}">
 {% endblock %}
@@ -7,6 +8,7 @@
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{% url 'crm:home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'crm:company_list' %}">Company list</a></li>
             <li class="breadcrumb-item active" aria-current="page">Land list</li>
         </ol>
     </nav>
@@ -35,8 +37,23 @@
                         <li>オーナー: {{ a_land.owner.username|default:"-" }}</li>
                         <li>備考: {{ a_land.remark|default:"-" }}</li>
                     </ul>
-                    <a href="{% url 'crm:land_report_chemical' company_id a_land.pk %}" class="btn btn-outline-primary{% if a_land.landscorechemical_set.all|length_is:0 %} disabled{% endif %}">化学レポート</a>
-                    <a href="#" class="btn btn-outline-primary disabled">硬度レポート</a>
+                    <div class="dropdown">
+                        <button class="btn btn-outline-primary dropdown-toggle m-1" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                            時期を選択
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            {% for landledger in land_ledger_map|get_value:a_land %}
+                                <li>
+                                    <a class="dropdown-item" href="#" data-value="{{ landledger.landperiod.id }}">
+                                        {{ landledger.landperiod.name }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        <input type="hidden" id="selectedLandledgerId" name="selectedLandledgerId" value="">
+                    </div>
+                    <a href="{% url 'crm:land_report_chemical' a_land.company.id landledger.pk %}" class="m-1 btn btn-outline-primary{% if a_land.landscorechemical_set.all|length_is:0 %} disabled{% endif %}">化学レポート</a>
+                    <a href="#" class="m-1 btn btn-outline-primary disabled">硬度レポート</a>
                 </div>
             </div>
         </div>
