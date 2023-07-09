@@ -7,6 +7,7 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, TemplateView, FormView
 
 from crm.domain.graph.graph_matplotlib import GraphMatplotlib
+from crm.domain.repository.landrepository import LandRepository
 from crm.domain.valueobject.zipfileprocessor import ZipFileProcessor
 from crm.forms import CompanyCreateForm, LandCreateForm, UploadZipForm
 from crm.models import Company, Land, LandScoreChemical, LandReview, CompanyCategory, Ledger, \
@@ -48,7 +49,15 @@ class LandListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        company = Company(pk=self.kwargs['company_id'])
+        land_repository = LandRepository(company)
+
+        land_ledger_map = {}
+        for land in context['object_list']:
+            land_ledger_map[land] = land_repository.read_landledgers(land)
+
         context['company_id'] = self.kwargs['company_id']
+        context['land_ledger_map'] = land_ledger_map
 
         return context
 

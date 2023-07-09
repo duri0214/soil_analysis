@@ -13,8 +13,8 @@ urlpatterns = [
     path('company/<int:company_id>/land/list', views.LandListView.as_view(), name='land_list'),
     path('company/<int:company_id>/land/create', views.LandCreateView.as_view(), name='land_create'),
     path('company/<int:company_id>/land/<int:pk>/detail/', views.LandDetailView.as_view(), name='land_detail'),
-    path('company/<int:company_id>/land/<int:land_id>/land_report_chemical', views.LandReportChemicalListView.as_view(),
-         name='land_report_chemical'),
+    path('company/<int:company_id>/landledger/<int:landledger_id>/land_report_chemical',
+         views.LandReportChemicalListView.as_view(), name='land_report_chemical'),
     path('upload/soilhardness', views.UploadSoilhardnessView.as_view(), name='upload_soilhardness'),
     path('upload/success/', views.UploadZipSuccessView.as_view(), name='upload_soilhardness_success'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
