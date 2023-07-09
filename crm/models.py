@@ -3,6 +3,10 @@ from django.db import models
 
 
 class CompanyCategory(models.Model):
+    """
+    顧客カテゴリマスタ
+    name 名称 e.g. 農業法人
+    """
     AGRI_COMPANY = 1
 
     name = models.CharField(max_length=256)
@@ -21,10 +25,10 @@ class Company(models.Model):
     """
     name = models.CharField(max_length=256)
     image = models.ImageField(upload_to='company/', null=True, blank=True)
-    category = models.ForeignKey(CompanyCategory, on_delete=models.CASCADE)
     remark = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(null=True)
+    category = models.ForeignKey(CompanyCategory, on_delete=models.CASCADE)
 
 
 class Crop(models.Model):
@@ -38,9 +42,9 @@ class Crop(models.Model):
     updated_at = models.DateTimeField(null=True)
 
 
-class Area(models.Model):
+class LandBlock(models.Model):
     """
-    圃場の「エリア」マスタ
+    圃場ブロックマスタ
     name        エリア名    e.g. A1
     """
     name = models.CharField(max_length=256)
@@ -57,7 +61,7 @@ class Area(models.Model):
         ]
 
 
-class Period(models.Model):
+class LandPeriod(models.Model):
     """
     時期マスタ
     year    西暦年      e.g. 2022
@@ -92,12 +96,17 @@ class CultivationType(models.Model):
 
 class Land(models.Model):
     """
-    法人が持つ「圃場」単位で収録
+    圃場マスタ
+    name        圃場名
     prefecture  都道府県    e.g. 茨城県
     location    住所       e.g. 結城郡八千代町
     latlon      緯度経度    e.g. 36.164677272061,139.86772928159
-    cultivation_type 作型  e.g. 露地、ビニールハウス
+    area        面積       e.g. 100㎡
+    image       写真
+    remark      備考
+    company     法人[FK]
     owner       オーナー    e.g. Ａ生産者
+    cultivation_type 作型  e.g. 露地、ビニールハウス
     """
     name = models.CharField(max_length=256)
     prefecture = models.CharField(max_length=256)
@@ -106,37 +115,16 @@ class Land(models.Model):
     area = models.FloatField(null=True, blank=True)
     image = models.ImageField(upload_to='land/', null=True, blank=True)
     remark = models.TextField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(null=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
     cultivation_type = models.ForeignKey(CultivationType, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(null=True)
-
-
-class LandReview(models.Model):
-    """
-    顧客が持つ圃場にperiod単位で評価コメントをつける
-    remarkはあくまで定型的につけたもの（commentが主体）
-    """
-    comment = models.TextField()
-    remark = models.TextField(null=True)
-    land = models.ForeignKey(Land, on_delete=models.CASCADE)
-    period = models.ForeignKey(Period, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(null=True)
-
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=["land", "period"],
-                name="land_period_unique"
-            ),
-        ]
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
 class SamplingMethod(models.Model):
     """
-    採土法 e.g. 5点法
+    採土法マスタ e.g. 5点法
     """
     name = models.CharField(max_length=256)
     remark = models.TextField(null=True)
@@ -144,22 +132,50 @@ class SamplingMethod(models.Model):
     updated_at = models.DateTimeField(null=True)
 
 
-class Ledger(models.Model):
+class LandLedger(models.Model):
     """
     採土した日についてまとめる台帳
     採土日, 採土法, 採土者, 分析依頼日, 報告日, 分析機関, 分析番号
     """
     sampling_date = models.DateField()
-    sampling_method = models.ForeignKey(SamplingMethod, on_delete=models.CASCADE)
-    sampling_staff = models.ForeignKey(User, on_delete=models.CASCADE)
     analysis_request_date = models.DateField(null=True)
     reporting_date = models.DateField(null=True)
-    analytical_agency = models.ForeignKey(Company, on_delete=models.CASCADE)
     analysis_number = models.IntegerField(null=True)
-    land = models.ForeignKey(Land, on_delete=models.CASCADE)
-    crop = models.ForeignKey(Crop, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(null=True)
+    analytical_agency = models.ForeignKey(Company, on_delete=models.CASCADE)
+    crop = models.ForeignKey(Crop, on_delete=models.CASCADE)
+    land = models.ForeignKey(Land, on_delete=models.CASCADE)
+    landperiod = models.ForeignKey(LandPeriod, on_delete=models.CASCADE)
+    sampling_method = models.ForeignKey(SamplingMethod, on_delete=models.CASCADE)
+    sampling_staff = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["land", "landperiod"],
+                name="land_landperiod_unique"
+            ),
+        ]
+
+
+class LandLedgerDetail(models.Model):
+    """
+    ブロック単位の台帳
+    """
+    remark = models.TextField(null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(null=True)
+    landblock = models.ForeignKey(LandBlock, on_delete=models.CASCADE)
+    landledger = models.ForeignKey(LandLedger, on_delete=models.CASCADE)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["landledger", "landblock"],
+                name="landledger_landblock_unique"
+            ),
+        ]
 
 
 class LandScoreChemical(models.Model):
@@ -202,25 +218,34 @@ class LandScoreChemical(models.Model):
     humus = models.FloatField(null=True)
     bulk_density = models.FloatField(null=True)
     remark = models.TextField(null=True)
-    land = models.ForeignKey(Land, on_delete=models.CASCADE)
-    area = models.ForeignKey(Area, on_delete=models.CASCADE)
-    period = models.ForeignKey(Period, on_delete=models.CASCADE)
-    ledger = models.ForeignKey(Ledger, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(null=True)
+    landledgerdetail = models.ForeignKey(LandLedgerDetail, on_delete=models.CASCADE)
+
+
+class LandReview(models.Model):
+    """
+    顧客が持つ圃場にperiod単位で評価コメントをつける
+    remarkはあくまで定型的につけたもの（commentが主体）
+    """
+    comment = models.TextField()
+    remark = models.TextField(null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(null=True)
+    landledger = models.ForeignKey(LandLedger, on_delete=models.CASCADE)
 
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=["land", "area", "period"],
-                name="land_area_period_unique"
+                fields=["landledger"],
+                name="landledger_unique"
             ),
         ]
 
 
 class Device(models.Model):
     """
-    土壌硬度計の名称
+    土壌硬度計マスタ
     """
     name = models.CharField(max_length=256)
     remark = models.TextField(null=True)
@@ -232,7 +257,6 @@ class SoilHardnessMeasurement(models.Model):
     """
     土壌硬度測定 生データ
     """
-    setdevice = models.ForeignKey(Device, on_delete=models.CASCADE)
     setmemory = models.IntegerField()
     setdatetime = models.DateTimeField()
     setdepth = models.IntegerField()
@@ -243,6 +267,7 @@ class SoilHardnessMeasurement(models.Model):
     csvfolder = models.CharField(max_length=256)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(null=True)
+    setdevice = models.ForeignKey(Device, on_delete=models.CASCADE)
 
     class Meta:
         constraints = [
