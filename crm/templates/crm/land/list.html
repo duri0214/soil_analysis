@@ -14,7 +14,7 @@
     </nav>
 {% endblock %}
 {% block content %}
-    <a class="btn btn-outline-primary mb-3" href="{% url 'crm:land_create' company_id %}" role="button">＋圃場の追加</a>
+    <a class="btn btn-outline-primary mb-3" href="{% url 'crm:land_create' company.id %}" role="button">＋圃場の追加</a>
     {% for a_land in object_list %}
         {% if not forloop.counter|divisibleby:"2" %}
             <div class="row mb-4">
