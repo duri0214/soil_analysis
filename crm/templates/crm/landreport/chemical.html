@@ -7,7 +7,7 @@
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{% url 'crm:home' %}">Home</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'crm:land_list' company_id %}">Land list</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'crm:land_list' company.id %}">Land list</a></li>
             <li class="breadcrumb-item active" aria-current="page">Land report chemical</li>
         </ol>
     </nav>
@@ -15,52 +15,42 @@
 {% block content %}
     <div class="row mb-4">
         <div class="col-sm-6">
-            <img src="data:image/png;base64,{{ chart_1 | safe }}" alt="窒素関連">
+            <img src="data:image/png;base64,{{ chart1 | safe }}" alt="窒素関連">
         </div>
         <div class="col-sm-6">
-            <img src="data:image/png;base64,{{ chart_2 | safe }}" alt="塩基類関連">
+            <img src="data:image/png;base64,{{ chart2 | safe }}" alt="塩基類関連">
         </div>
     </div>
     <div class="row">
         <div class="col-sm-6">
-            <img src="data:image/png;base64,{{ chart_3 | safe }}" alt="リン酸関連">
+            <img src="data:image/png;base64,{{ chart3 | safe }}" alt="リン酸関連">
         </div>
         <div class="col-sm-6">
-            <img src="data:image/png;base64,{{ chart_4 | safe }}" alt="土壌ポテンシャル関連">
+            <img src="data:image/png;base64,{{ chart4 | safe }}" alt="土壌ポテンシャル関連">
         </div>
     </div>
     <div class="alert alert-primary m-4" role="alert">
-        {{ land_review.first.comment }}
+        {{ landreview.first.comment }}
     </div>
 
-    <div class="m-4">
-        <div class="row">
-            <label>
-                <select class="col-sm-3">
-                    {% for item in ledger %}
-                        <option value="{{ item.pk }}">{{ item.analysis_number }}（採土日: {{ item.sampling_date }}）</option>
-                    {% endfor %}
-                </select>
-            </label>
-            <p class="col-sm-9 small">TODO: いまは台帳全部出るのでドロップダウンで選んだ日付の９マスを出すようにする</p>
-        </div>
-        {% for item in ledger %}
-            <ul>
-                <li>圃場: {{ item.land.name|default:"-" }}</li>
-                <li>作物: {{ item.crop.name|default:"-" }}</li>
-                <li>採土日: {{ item.sampling_date|default:"-" }}</li>
-                <li>採土法: {{ item.sampling_method.name|default:"-" }}</li>
-                <li>採土者: {{ item.sampling_staff|default:"-" }}</li>
-                <li>分析依頼日: {{ item.analysis_request_date|default:"-" }}</li>
-                <li>報告日: {{ item.reporting_date|default:"-" }}</li>
-                <li>分析機関: {{ item.analytical_agency.name|default:"-" }}</li>
-                <li>分析番号: {{ item.analysis_number|default:"-" }}</li>
-            </ul>
-        {% endfor %}
+    <div class="container">
+        <table class="table table-sm">
+            <tbody>
+                <tr><td>圃場</td><td>{{ landledger.land.name|default:"-" }}</td></tr>
+                <tr><td>作物</td><td>{{ landledger.crop.name|default:"-" }}</td></tr>
+                <tr><td>採土日</td><td>{{ landledger.sampling_date|default:"-" }}</td></tr>
+                <tr><td>採土法</td><td>{{ landledger.sampling_method.name|default:"-" }}</td></tr>
+                <tr><td>採土者</td><td>{{ landledger.sampling_staff|default:"-" }}</td></tr>
+                <tr><td>分析依頼日</td><td>{{ landledger.analysis_request_date|default:"-" }}</td></tr>
+                <tr><td>報告日</td><td>{{ landledger.reporting_date|default:"-" }}</td></tr>
+                <tr><td>分析機関</td><td>{{ landledger.analytical_agency.name|default:"-" }}</td></tr>
+                <tr><td>分析番号</td><td>{{ landledger.analysis_number|default:"-" }}</td></tr>
+            </tbody>
+        </table>
     </div>
 
     <div class="card-group justify-content-center">
-        {% for landscore in landscorechemical_list %}
+        {% for landscore in landscores %}
             {% if forloop.first %}
                 <div class="row mb-4">
             {% endif %}
@@ -68,9 +58,9 @@
                 <div class="card">
                     <svg class="bd-placeholder-img card-img-top" width="100%" height="180" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Image cap"><title>Placeholder</title><rect fill="#868e96" width="100%" height="100%"/><text fill="#dee2e6" dy=".3em" x="38%" y="50%">Image cap</text></svg>
                     <div class="card-body">
-                        <h5 class="card-title">{{ landscore.area.name }}</h5>
+                        <h5 class="card-title">{{ landscore.landledgerdetail.landblock.name }}</h5>
                         <ul class="card-text">
-                            <li class="mb-2">時期: {{ landscore.period.name|default:"-" }}</li>
+                            <li class="mb-2">時期: {{ landscore.landledgerdetail.landledger.landperiod.name|default:"-" }}</li>
                             <li>電気伝導率: {{ landscore.ec }}</li>
                             <li>アンモニア態窒素: {{ landscore.nh4n }}</li>
                             <li>硝酸態窒素: {{ landscore.no3n }}</li>
