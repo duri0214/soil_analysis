@@ -5,10 +5,10 @@ import zipfile
 from django.core.files.base import ContentFile
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.test import TestCase, override_settings
-from crm.domain.valueobject.zipfileprocessor import ZipFileProcessor
+from crm.domain.services.zipfileservice import ZipFileService
 
 
-class ZipFileProcessorTestCase(TestCase):
+class ZipFileServiceTestCase(TestCase):
     @override_settings(MEDIA_ROOT=tempfile.gettempdir())
     def test_handle_uploaded_zip(self):
         # ZIP ファイルを作成
@@ -33,7 +33,7 @@ class ZipFileProcessorTestCase(TestCase):
             charset=None,
         )
 
-        result = ZipFileProcessor.handle_uploaded_zip(uploaded_file)
+        result = ZipFileService.handle_uploaded_zip(uploaded_file)
 
         # media/soilhardness と一致する
         expected_upload_folder = os.path.join(tempfile.gettempdir(), 'soilhardness')

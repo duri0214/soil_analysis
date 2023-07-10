@@ -5,7 +5,7 @@ from django.conf import settings
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
 
-class ZipFileProcessor:
+class ZipFileService:
     @staticmethod
     def handle_uploaded_zip(file: InMemoryUploadedFile) -> str:
         """
@@ -27,7 +27,7 @@ class ZipFileProcessor:
         # ファイルを解凍
         with zipfile.ZipFile(destination_zip_path) as z:
             for info in z.infolist():
-                info.filename = ZipFileProcessor._convert_to_cp932(info.filename)
+                info.filename = ZipFileService._convert_to_cp932(info.filename)
                 z.extract(info, path=upload_folder)
 
         return upload_folder

@@ -21,8 +21,8 @@ class TestPhotoProcessingService(TestCase):
         self.land_candidates = LandCandidates([self.land1, self.land2, self.land3, self.land4])
 
         self.photo_paths = [
-            r"D:/OneDrive/ダウンロード/android/ススムＢ1_right.jpg",
-            r"D:/OneDrive/ダウンロード/android/ススムB2.jpg"
+            r"D:/OneDrive/dev/soil_analysisローカルデータ/サンプルデータ/android/ススムＢ1_right.jpg",
+            r"D:/OneDrive/dev/soil_analysisローカルデータ/サンプルデータ/android/ススムB2.jpg"
         ]
 
     def test_calculate_distance(self):
@@ -65,7 +65,7 @@ class TestPhotoProcessingService(TestCase):
         processed_photos = service.process_photos(self.photo_paths, self.land_candidates)
         # 期待される処理後の写真のリストと一致するか検証する
         expected_processed_photos = [
-            "D:/OneDrive/ダウンロード/android/ススムＢ1_right.jpg",
-            "D:/OneDrive/ダウンロード/android/ススムB2.jpg"
+            "D:/OneDrive/dev/soil_analysisローカルデータ/サンプルデータ/android/ススムＢ1_right.jpg",
+            "D:/OneDrive/dev/soil_analysisローカルデータ/サンプルデータ/android/ススムB2.jpg"
         ]
         self.assertEqual(expected_processed_photos, processed_photos)

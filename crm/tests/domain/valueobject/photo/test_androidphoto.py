@@ -6,7 +6,7 @@ from crm.domain.valueobject.photo.androidphoto import AndroidPhoto
 
 class TestAndroidPhoto(TestCase):
     def setUp(self):
-        self.file_path = r"D:/OneDrive/ダウンロード/android/ススムＢ1_right.jpg"
+        self.file_path = r"D:/OneDrive/dev/soil_analysisローカルデータ/サンプルデータ/android/ススムＢ1_right.jpg"
         self.android_photo = AndroidPhoto(self.file_path)
         self.android_photo.exif_data = self.android_photo._extract_exif_data()
 

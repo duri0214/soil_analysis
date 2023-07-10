@@ -8,7 +8,7 @@ from django.views.generic import ListView, CreateView, DetailView, TemplateView,
 
 from crm.domain.graph.graph_matplotlib import GraphMatplotlib
 from crm.domain.repository.landrepository import LandRepository
-from crm.domain.valueobject.zipfileprocessor import ZipFileProcessor
+from crm.domain.services.zipfileservice import ZipFileService
 from crm.forms import CompanyCreateForm, LandCreateForm, UploadZipForm
 from crm.models import Company, Land, LandScoreChemical, LandReview, CompanyCategory, Ledger, \
     SoilHardnessMeasurementImportErrors
@@ -173,7 +173,7 @@ class UploadSoilhardnessView(FormView):
 
     def form_valid(self, form):
         # Zipを処理してバッチ実行
-        upload_folder = ZipFileProcessor.handle_uploaded_zip(self.request.FILES['zipfile'])
+        upload_folder = ZipFileService.handle_uploaded_zip(self.request.FILES['zipfile'])
         if os.path.exists(upload_folder):
             call_command('import_soil_hardness', upload_folder)
             shutil.rmtree(upload_folder)
