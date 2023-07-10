@@ -3,23 +3,6 @@
     "model": "crm.LandLedger",
     "fields": {
       "id":1,
-      "sampling_date":"2022-03-03",
-      "analysis_request_date":"2022-03-13",
-      "reporting_date":"2022-03-20",
-      "analysis_number":2206063,
-      "created_at":"2022-03-30T15:00:00+09:00",
-      "analytical_agency_id":4,
-      "crop_id":1,
-      "land_id":1,
-      "landperiod_id":1,
-      "sampling_method_id":1,
-      "sampling_staff_id":2
-    }
-  },
-  {
-    "model": "crm.LandLedger",
-    "fields": {
-      "id":2,
       "sampling_date":"2022-06-03",
       "analysis_request_date":"2022-06-13",
       "reporting_date":"2022-06-20",
@@ -36,7 +19,7 @@
   {
     "model": "crm.LandLedger",
     "fields": {
-      "id":3,
+      "id":2,
       "sampling_date":"2022-09-03",
       "analysis_request_date":"2022-09-13",
       "reporting_date":"2022-09-20",
@@ -46,6 +29,23 @@
       "crop_id":1,
       "land_id":1,
       "landperiod_id":3,
+      "sampling_method_id":1,
+      "sampling_staff_id":2
+    }
+  },
+  {
+    "model": "crm.LandLedger",
+    "fields": {
+      "id":3,
+      "sampling_date":"2023-03-03",
+      "analysis_request_date":"2023-03-13",
+      "reporting_date":"2023-03-20",
+      "analysis_number":2206073,
+      "created_at":"2023-03-30T15:00:00+09:00",
+      "analytical_agency_id":4,
+      "crop_id":1,
+      "land_id":1,
+      "landperiod_id":4,
       "sampling_method_id":1,
       "sampling_staff_id":2
     }

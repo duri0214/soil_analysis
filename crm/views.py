@@ -51,10 +51,7 @@ class LandListView(ListView):
         context = super().get_context_data(**kwargs)
         company = Company(pk=self.kwargs['company_id'])
         land_repository = LandRepository(company)
-
-        land_ledger_map = {}
-        for land in context['object_list']:
-            land_ledger_map[land] = land_repository.read_landledgers(land)
+        land_ledger_map = {land: land_repository.read_landledgers(land) for land in context['object_list']}
 
         context['company_id'] = self.kwargs['company_id']
         context['land_ledger_map'] = land_ledger_map
