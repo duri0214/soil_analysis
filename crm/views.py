@@ -2,11 +2,10 @@ import os
 import shutil
 
 from django.core.management import call_command
-from django.db.models import Avg
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, TemplateView, FormView
 
-from crm.domain.graph.graph_matplotlib import GraphMatplotlib
+from crm.domain.services.reports.reportlayout1 import ReportLayout1
 from crm.domain.repository.landrepository import LandRepository
 from crm.domain.services.zipfileservice import ZipFileService
 from crm.forms import CompanyCreateForm, LandCreateForm, UploadZipForm
@@ -97,72 +96,11 @@ class LandReportChemicalListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         landledger = LandLedger.objects.get(id=self.kwargs['landledger_id'])
-        landscores = LandScoreChemical.objects.filter(landledger=landledger)
 
-        # LandScoreChemical
-        land_scores_agg = landscores.aggregate(
-            Avg('ec'), Avg('nh4n'), Avg('no3n'), Avg('total_nitrogen'), Avg('nh4_per_nitrogen'),
-            Avg('ph'), Avg('cao'), Avg('mgo'), Avg('k2o'), Avg('base_saturation'), Avg('cao_per_mgo'),
-            Avg('mgo_per_k2o'), Avg('phosphorus_absorption'), Avg('p2o5'), Avg('cec'), Avg('humus'),
-            Avg('bulk_density'),
-        )
-
-        g = GraphMatplotlib()
-        x = ['EC(mS/cm)', 'NH4-N(mg/100g)', 'NO3-N(mg/100g)', '無機態窒素', 'NH4/無機態窒素', ' ', '  ']
-        y = [
-            land_scores_agg['ec__avg'],
-            land_scores_agg['nh4n__avg'],
-            land_scores_agg['no3n__avg'],
-            land_scores_agg['total_nitrogen__avg'],
-            land_scores_agg['nh4_per_nitrogen__avg'],
-            0,
-            0
-        ]
-        chart1 = g.plot_graph("窒素関連（1圃場の全エリア平均）", x, y)
-
-        x = ['ph', 'CaO(mg/100g)', 'MgO(mg/100g)', 'K2O(mg/100g)', '塩基飽和度(%)', 'CaO/MgO', 'MgO/K2O']
-        y = [
-            land_scores_agg['ph__avg'],
-            land_scores_agg['cao__avg'],
-            land_scores_agg['mgo__avg'],
-            land_scores_agg['k2o__avg'],
-            land_scores_agg['base_saturation__avg'],
-            land_scores_agg['cao_per_mgo__avg'],
-            land_scores_agg['mgo_per_k2o__avg']
-        ]
-        chart2 = g.plot_graph("塩基類関連（1圃場の全エリア平均）", x, y)
-
-        x = ['リン吸(mg/100g)', 'P2O5(mg/100g)', ' ', '  ', '   ', '    ', '     ']
-        y = [
-            land_scores_agg['phosphorus_absorption__avg'],
-            land_scores_agg['p2o5__avg'],
-            0,
-            0,
-            0,
-            0,
-            0
-        ]
-        chart3 = g.plot_graph("リン酸関連（1圃場の全エリア平均）", x, y)
-
-        x = ['CEC(meq/100g)', '腐植(%)', '仮比重', ' ', '  ', '   ', '    ']
-        y = [
-            land_scores_agg['cec__avg'],
-            land_scores_agg['humus__avg'],
-            land_scores_agg['bulk_density__avg'],
-            0,
-            0,
-            0,
-            0
-        ]
-        chart4 = g.plot_graph("土壌ポテンシャル関連（1圃場の全エリア平均）", x, y)
-
-        context['chart1'] = chart1
-        context['chart2'] = chart2
-        context['chart3'] = chart3
-        context['chart4'] = chart4
+        context['charts'] = ReportLayout1(landledger).publish()
         context['company'] = Company(self.kwargs['company_id'])
         context['landledger'] = landledger
-        context['landscores'] = landscores
+        context['landscores'] = LandScoreChemical.objects.filter(landledger=landledger)
         context['landreview'] = LandReview.objects.filter(landledger=landledger)
 
         return context

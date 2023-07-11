@@ -1,8 +1,8 @@
-import abc
+from abc import ABC, abstractmethod
 
 
-class GraphAbstract(object, metaclass=abc.ABCMeta):
+class BaseGraphEngine(ABC):
     """グラフ処理を定義するための基底クラス"""
-    @abc.abstractmethod
+    @abstractmethod
     def plot_graph(self, *args):
         pass

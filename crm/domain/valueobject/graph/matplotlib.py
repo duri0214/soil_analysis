@@ -2,13 +2,13 @@ import matplotlib.pyplot as plt
 import base64
 from io import BytesIO
 
-from .graph_abstract import GraphAbstract
+from .basegraphengine import BaseGraphEngine
 
 
-class GraphMatplotlib(GraphAbstract):
+class Matplotlib(BaseGraphEngine):
     def plot_graph(self, title, x, y):
         """
-        グラフをプロットするための関数
+        グラフをプロットするための設定
         :param title:
         :param x:
         :param y:

@@ -15,18 +15,18 @@
 {% block content %}
     <div class="row mb-4">
         <div class="col-sm-6">
-            <img src="data:image/png;base64,{{ chart1 | safe }}" alt="窒素関連">
+            <img src="data:image/png;base64,{{ charts.chart1 | safe }}" alt="窒素関連">
         </div>
         <div class="col-sm-6">
-            <img src="data:image/png;base64,{{ chart2 | safe }}" alt="塩基類関連">
+            <img src="data:image/png;base64,{{ charts.chart2 | safe }}" alt="塩基類関連">
         </div>
     </div>
     <div class="row">
         <div class="col-sm-6">
-            <img src="data:image/png;base64,{{ chart3 | safe }}" alt="リン酸関連">
+            <img src="data:image/png;base64,{{ charts.chart3 | safe }}" alt="リン酸関連">
         </div>
         <div class="col-sm-6">
-            <img src="data:image/png;base64,{{ chart4 | safe }}" alt="土壌ポテンシャル関連">
+            <img src="data:image/png;base64,{{ charts.chart4 | safe }}" alt="土壌ポテンシャル関連">
         </div>
     </div>
     <div class="alert alert-primary m-4" role="alert">
