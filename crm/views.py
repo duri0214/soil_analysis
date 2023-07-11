@@ -11,7 +11,7 @@ from crm.domain.repository.landrepository import LandRepository
 from crm.domain.services.zipfileservice import ZipFileService
 from crm.forms import CompanyCreateForm, LandCreateForm, UploadZipForm
 from crm.models import Company, Land, LandScoreChemical, LandReview, CompanyCategory, LandLedger, \
-    SoilHardnessMeasurementImportErrors, LandLedgerDetail
+    SoilHardnessMeasurementImportErrors
 
 
 class Home(TemplateView):
@@ -92,14 +92,12 @@ class LandReportChemicalListView(ListView):
 
     def get_queryset(self):
         landledger = LandLedger(self.kwargs['landledger_id'])
-        landledgerdetails = LandLedgerDetail.objects.filter(landledger=landledger)
-        return super().get_queryset().filter(landledgerdetail__in=landledgerdetails)
+        return super().get_queryset().filter(landledger=landledger)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         landledger = LandLedger.objects.get(id=self.kwargs['landledger_id'])
-        landledgerdetails = LandLedgerDetail.objects.filter(landledger=landledger)
-        landscores = LandScoreChemical.objects.filter(landledgerdetail__in=landledgerdetails)
+        landscores = LandScoreChemical.objects.filter(landledger=landledger)
 
         # LandScoreChemical
         land_scores_agg = landscores.aggregate(

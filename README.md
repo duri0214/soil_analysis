@@ -24,7 +24,6 @@ python manage.py loaddata .\crm\fixtures\land.json
 python manage.py loaddata .\crm\fixtures\samplingmethod.json
 python manage.py loaddata .\crm\fixtures\landledger.json
 python manage.py loaddata .\crm\fixtures\landreview.json
-python manage.py loaddata .\crm\fixtures\landledgerdetail.json
 python manage.py loaddata .\crm\fixtures\landscorechemical.json
 python manage.py loaddata .\crm\fixtures\device.json
 ```

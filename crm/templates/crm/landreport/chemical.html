@@ -38,6 +38,7 @@
             <tbody>
                 <tr><td>圃場</td><td>{{ landledger.land.name|default:"-" }}</td></tr>
                 <tr><td>作物</td><td>{{ landledger.crop.name|default:"-" }}</td></tr>
+                <tr><td>時期</td><td>{{ landledger.landperiod.name|default:"-" }}</td></tr>
                 <tr><td>採土日</td><td>{{ landledger.sampling_date|default:"-" }}</td></tr>
                 <tr><td>採土法</td><td>{{ landledger.sampling_method.name|default:"-" }}</td></tr>
                 <tr><td>採土者</td><td>{{ landledger.sampling_staff|default:"-" }}</td></tr>
@@ -58,9 +59,8 @@
                 <div class="card">
                     <svg class="bd-placeholder-img card-img-top" width="100%" height="180" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Image cap"><title>Placeholder</title><rect fill="#868e96" width="100%" height="100%"/><text fill="#dee2e6" dy=".3em" x="38%" y="50%">Image cap</text></svg>
                     <div class="card-body">
-                        <h5 class="card-title">{{ landscore.landledgerdetail.landblock.name }}</h5>
+                        <h5 class="card-title">{{ landscore.landblock.name }}</h5>
                         <ul class="card-text">
-                            <li class="mb-2">時期: {{ landscore.landledgerdetail.landledger.landperiod.name|default:"-" }}</li>
                             <li>電気伝導率: {{ landscore.ec }}</li>
                             <li>アンモニア態窒素: {{ landscore.nh4n }}</li>
                             <li>硝酸態窒素: {{ landscore.no3n }}</li>

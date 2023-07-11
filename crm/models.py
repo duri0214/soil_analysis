@@ -159,25 +159,6 @@ class LandLedger(models.Model):
         ]
 
 
-class LandLedgerDetail(models.Model):
-    """
-    ブロック単位の台帳
-    """
-    remark = models.TextField(null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(null=True)
-    landblock = models.ForeignKey(LandBlock, on_delete=models.CASCADE)
-    landledger = models.ForeignKey(LandLedger, on_delete=models.CASCADE)
-
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=["landledger", "landblock"],
-                name="landledger_landblock_unique"
-            ),
-        ]
-
-
 class LandScoreChemical(models.Model):
     """
     顧客が持つ圃場をエリア単位で１レコードに収録します
@@ -220,7 +201,8 @@ class LandScoreChemical(models.Model):
     remark = models.TextField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(null=True)
-    landledgerdetail = models.ForeignKey(LandLedgerDetail, on_delete=models.CASCADE)
+    landblock = models.ForeignKey(LandBlock, on_delete=models.CASCADE)
+    landledger = models.ForeignKey(LandLedger, on_delete=models.CASCADE)
 
 
 class LandReview(models.Model):
