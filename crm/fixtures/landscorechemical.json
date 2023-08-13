@@ -28,32 +28,6 @@
   {
     "model": "crm.LandScoreChemical",
     "fields": {
-      "id":2,
-      "ec":18,
-      "nh4n":9,
-      "no3n":17,
-      "total_nitrogen":13,
-      "nh4_per_nitrogen":1,
-      "ph":19,
-      "cao":10,
-      "mgo":20,
-      "k2o":13,
-      "base_saturation":5,
-      "cao_per_mgo":5,
-      "mgo_per_k2o":20,
-      "phosphorus_absorption":15,
-      "p2o5":2,
-      "cec":3,
-      "humus":4,
-      "bulk_density":2,
-      "created_at":"2022-08-22T15:00:00+09:00",
-      "landblock_id": 2,
-      "landledger_id":1
-    }
-  },
-  {
-    "model": "crm.LandScoreChemical",
-    "fields": {
       "id":3,
       "ec":7,
       "nh4n":10,
@@ -74,32 +48,6 @@
       "bulk_density":16,
       "created_at":"2022-08-23T15:00:00+09:00",
       "landblock_id": 3,
-      "landledger_id":1
-    }
-  },
-  {
-    "model": "crm.LandScoreChemical",
-    "fields": {
-      "id":4,
-      "ec":3,
-      "nh4n":2,
-      "no3n":19,
-      "total_nitrogen":1,
-      "nh4_per_nitrogen":10,
-      "ph":2,
-      "cao":5,
-      "mgo":16,
-      "k2o":18,
-      "base_saturation":4,
-      "cao_per_mgo":4,
-      "mgo_per_k2o":9,
-      "phosphorus_absorption":14,
-      "p2o5":18,
-      "cec":2,
-      "humus":2,
-      "bulk_density":6,
-      "created_at":"2022-08-24T15:00:00+09:00",
-      "landblock_id": 4,
       "landledger_id":1
     }
   },
@@ -132,32 +80,6 @@
   {
     "model": "crm.LandScoreChemical",
     "fields": {
-      "id":6,
-      "ec":19,
-      "nh4n":8,
-      "no3n":16,
-      "total_nitrogen":18,
-      "nh4_per_nitrogen":7,
-      "ph":6,
-      "cao":2,
-      "mgo":9,
-      "k2o":16,
-      "base_saturation":7,
-      "cao_per_mgo":16,
-      "mgo_per_k2o":2,
-      "phosphorus_absorption":5,
-      "p2o5":6,
-      "cec":17,
-      "humus":10,
-      "bulk_density":1,
-      "created_at":"2022-08-26T15:00:00+09:00",
-      "landblock_id": 6,
-      "landledger_id":1
-    }
-  },
-  {
-    "model": "crm.LandScoreChemical",
-    "fields": {
       "id":7,
       "ec":1,
       "nh4n":18,
@@ -178,32 +100,6 @@
       "bulk_density":17,
       "created_at":"2022-08-27T15:00:00+09:00",
       "landblock_id": 7,
-      "landledger_id":1
-    }
-  },
-  {
-    "model": "crm.LandScoreChemical",
-    "fields": {
-      "id":8,
-      "ec":10,
-      "nh4n":8,
-      "no3n":19,
-      "total_nitrogen":8,
-      "nh4_per_nitrogen":5,
-      "ph":5,
-      "cao":16,
-      "mgo":16,
-      "k2o":8,
-      "base_saturation":5,
-      "cao_per_mgo":1,
-      "mgo_per_k2o":11,
-      "phosphorus_absorption":5,
-      "p2o5":7,
-      "cec":19,
-      "humus":20,
-      "bulk_density":3,
-      "created_at":"2022-08-28T15:00:00+09:00",
-      "landblock_id": 8,
       "landledger_id":1
     }
   },
@@ -262,32 +158,6 @@
   {
     "model": "crm.LandScoreChemical",
     "fields": {
-      "id":11,
-      "ec":11,
-      "nh4n":1,
-      "no3n":18,
-      "total_nitrogen":13,
-      "nh4_per_nitrogen":15,
-      "ph":12,
-      "cao":1,
-      "mgo":4,
-      "k2o":16,
-      "base_saturation":10,
-      "cao_per_mgo":20,
-      "mgo_per_k2o":15,
-      "phosphorus_absorption":19,
-      "p2o5":10,
-      "cec":7,
-      "humus":14,
-      "bulk_density":14,
-      "created_at":"2022-08-13T15:00:00+09:00",
-      "landblock_id": 2,
-      "landledger_id":2
-    }
-  },
-  {
-    "model": "crm.LandScoreChemical",
-    "fields": {
       "id":12,
       "ec":14,
       "nh4n":8,
@@ -308,32 +178,6 @@
       "bulk_density":4,
       "created_at":"2022-08-14T15:00:00+09:00",
       "landblock_id": 3,
-      "landledger_id":2
-    }
-  },
-  {
-    "model": "crm.LandScoreChemical",
-    "fields": {
-      "id":13,
-      "ec":16,
-      "nh4n":1,
-      "no3n":11,
-      "total_nitrogen":16,
-      "nh4_per_nitrogen":1,
-      "ph":11,
-      "cao":15,
-      "mgo":19,
-      "k2o":5,
-      "base_saturation":7,
-      "cao_per_mgo":7,
-      "mgo_per_k2o":7,
-      "phosphorus_absorption":7,
-      "p2o5":13,
-      "cec":2,
-      "humus":18,
-      "bulk_density":18,
-      "created_at":"2022-08-15T15:00:00+09:00",
-      "landblock_id": 4,
       "landledger_id":2
     }
   },
@@ -366,32 +210,6 @@
   {
     "model": "crm.LandScoreChemical",
     "fields": {
-      "id":15,
-      "ec":18,
-      "nh4n":11,
-      "no3n":20,
-      "total_nitrogen":13,
-      "nh4_per_nitrogen":5,
-      "ph":11,
-      "cao":8,
-      "mgo":7,
-      "k2o":19,
-      "base_saturation":10,
-      "cao_per_mgo":1,
-      "mgo_per_k2o":8,
-      "phosphorus_absorption":13,
-      "p2o5":5,
-      "cec":8,
-      "humus":13,
-      "bulk_density":12,
-      "created_at":"2022-08-17T15:00:00+09:00",
-      "landblock_id": 6,
-      "landledger_id":2
-    }
-  },
-  {
-    "model": "crm.LandScoreChemical",
-    "fields": {
       "id":16,
       "ec":3,
       "nh4n":9,
@@ -412,32 +230,6 @@
       "bulk_density":17,
       "created_at":"2022-08-18T15:00:00+09:00",
       "landblock_id": 7,
-      "landledger_id":2
-    }
-  },
-  {
-    "model": "crm.LandScoreChemical",
-    "fields": {
-      "id":17,
-      "ec":1,
-      "nh4n":7,
-      "no3n":17,
-      "total_nitrogen":17,
-      "nh4_per_nitrogen":14,
-      "ph":2,
-      "cao":20,
-      "mgo":3,
-      "k2o":5,
-      "base_saturation":2,
-      "cao_per_mgo":1,
-      "mgo_per_k2o":16,
-      "phosphorus_absorption":18,
-      "p2o5":18,
-      "cec":2,
-      "humus":3,
-      "bulk_density":2,
-      "created_at":"2022-08-19T15:00:00+09:00",
-      "landblock_id": 8,
       "landledger_id":2
     }
   },
@@ -496,32 +288,6 @@
   {
     "model": "crm.LandScoreChemical",
     "fields": {
-      "id":20,
-      "ec":5,
-      "nh4n":5,
-      "no3n":8,
-      "total_nitrogen":6,
-      "nh4_per_nitrogen":12,
-      "ph":5,
-      "cao":17,
-      "mgo":2,
-      "k2o":12,
-      "base_saturation":10,
-      "cao_per_mgo":9,
-      "mgo_per_k2o":18,
-      "phosphorus_absorption":17,
-      "p2o5":17,
-      "cec":7,
-      "humus":7,
-      "bulk_density":7,
-      "created_at":"2022-08-22T15:00:00+09:00",
-      "landblock_id": 2,
-      "landledger_id":3
-    }
-  },
-  {
-    "model": "crm.LandScoreChemical",
-    "fields": {
       "id":21,
       "ec":7,
       "nh4n":2,
@@ -542,32 +308,6 @@
       "bulk_density":1,
       "created_at":"2022-08-23T15:00:00+09:00",
       "landblock_id": 3,
-      "landledger_id":3
-    }
-  },
-  {
-    "model": "crm.LandScoreChemical",
-    "fields": {
-      "id":22,
-      "ec":1,
-      "nh4n":16,
-      "no3n":20,
-      "total_nitrogen":9,
-      "nh4_per_nitrogen":14,
-      "ph":7,
-      "cao":2,
-      "mgo":13,
-      "k2o":14,
-      "base_saturation":3,
-      "cao_per_mgo":15,
-      "mgo_per_k2o":16,
-      "phosphorus_absorption":2,
-      "p2o5":19,
-      "cec":14,
-      "humus":9,
-      "bulk_density":2,
-      "created_at":"2022-08-24T15:00:00+09:00",
-      "landblock_id": 4,
       "landledger_id":3
     }
   },
@@ -600,32 +340,6 @@
   {
     "model": "crm.LandScoreChemical",
     "fields": {
-      "id":24,
-      "ec":12,
-      "nh4n":7,
-      "no3n":13,
-      "total_nitrogen":7,
-      "nh4_per_nitrogen":17,
-      "ph":5,
-      "cao":19,
-      "mgo":19,
-      "k2o":6,
-      "base_saturation":7,
-      "cao_per_mgo":5,
-      "mgo_per_k2o":10,
-      "phosphorus_absorption":6,
-      "p2o5":19,
-      "cec":20,
-      "humus":7,
-      "bulk_density":15,
-      "created_at":"2022-08-26T15:00:00+09:00",
-      "landblock_id": 6,
-      "landledger_id":3
-    }
-  },
-  {
-    "model": "crm.LandScoreChemical",
-    "fields": {
       "id":25,
       "ec":18,
       "nh4n":3,
@@ -646,32 +360,6 @@
       "bulk_density":19,
       "created_at":"2022-08-27T15:00:00+09:00",
       "landblock_id": 7,
-      "landledger_id":3
-    }
-  },
-  {
-    "model": "crm.LandScoreChemical",
-    "fields": {
-      "id":26,
-      "ec":17,
-      "nh4n":1,
-      "no3n":15,
-      "total_nitrogen":2,
-      "nh4_per_nitrogen":4,
-      "ph":16,
-      "cao":17,
-      "mgo":7,
-      "k2o":3,
-      "base_saturation":6,
-      "cao_per_mgo":12,
-      "mgo_per_k2o":18,
-      "phosphorus_absorption":3,
-      "p2o5":9,
-      "cec":13,
-      "humus":12,
-      "bulk_density":9,
-      "created_at":"2022-08-28T15:00:00+09:00",
-      "landblock_id": 8,
       "landledger_id":3
     }
   },
@@ -730,32 +418,6 @@
   {
     "model": "crm.LandScoreChemical",
     "fields": {
-      "id":29,
-      "ec":11,
-      "nh4n":14,
-      "no3n":5,
-      "total_nitrogen":8,
-      "nh4_per_nitrogen":1,
-      "ph":8,
-      "cao":6,
-      "mgo":5,
-      "k2o":11,
-      "base_saturation":13,
-      "cao_per_mgo":2,
-      "mgo_per_k2o":20,
-      "phosphorus_absorption":19,
-      "p2o5":1,
-      "cec":12,
-      "humus":9,
-      "bulk_density":5,
-      "created_at":"2022-08-13T15:00:00+09:00",
-      "landblock_id": 2,
-      "landledger_id":4
-    }
-  },
-  {
-    "model": "crm.LandScoreChemical",
-    "fields": {
       "id":30,
       "ec":6,
       "nh4n":14,
@@ -776,32 +438,6 @@
       "bulk_density":17,
       "created_at":"2022-08-14T15:00:00+09:00",
       "landblock_id": 3,
-      "landledger_id":4
-    }
-  },
-  {
-    "model": "crm.LandScoreChemical",
-    "fields": {
-      "id":31,
-      "ec":15,
-      "nh4n":14,
-      "no3n":10,
-      "total_nitrogen":10,
-      "nh4_per_nitrogen":4,
-      "ph":9,
-      "cao":9,
-      "mgo":10,
-      "k2o":16,
-      "base_saturation":16,
-      "cao_per_mgo":19,
-      "mgo_per_k2o":14,
-      "phosphorus_absorption":11,
-      "p2o5":15,
-      "cec":5,
-      "humus":11,
-      "bulk_density":1,
-      "created_at":"2022-08-15T15:00:00+09:00",
-      "landblock_id": 4,
       "landledger_id":4
     }
   },
@@ -834,32 +470,6 @@
   {
     "model": "crm.LandScoreChemical",
     "fields": {
-      "id":33,
-      "ec":20,
-      "nh4n":13,
-      "no3n":18,
-      "total_nitrogen":15,
-      "nh4_per_nitrogen":15,
-      "ph":14,
-      "cao":11,
-      "mgo":12,
-      "k2o":7,
-      "base_saturation":10,
-      "cao_per_mgo":14,
-      "mgo_per_k2o":17,
-      "phosphorus_absorption":16,
-      "p2o5":18,
-      "cec":13,
-      "humus":15,
-      "bulk_density":8,
-      "created_at":"2022-08-17T15:00:00+09:00",
-      "landblock_id": 6,
-      "landledger_id":4
-    }
-  },
-  {
-    "model": "crm.LandScoreChemical",
-    "fields": {
       "id":34,
       "ec":11,
       "nh4n":2,
@@ -880,32 +490,6 @@
       "bulk_density":3,
       "created_at":"2022-08-18T15:00:00+09:00",
       "landblock_id": 7,
-      "landledger_id":4
-    }
-  },
-  {
-    "model": "crm.LandScoreChemical",
-    "fields": {
-      "id":35,
-      "ec":10,
-      "nh4n":6,
-      "no3n":12,
-      "total_nitrogen":20,
-      "nh4_per_nitrogen":14,
-      "ph":2,
-      "cao":16,
-      "mgo":14,
-      "k2o":19,
-      "base_saturation":10,
-      "cao_per_mgo":12,
-      "mgo_per_k2o":11,
-      "phosphorus_absorption":2,
-      "p2o5":16,
-      "cec":4,
-      "humus":10,
-      "bulk_density":11,
-      "created_at":"2022-08-19T15:00:00+09:00",
-      "landblock_id": 8,
       "landledger_id":4
     }
   },
@@ -964,32 +548,6 @@
   {
     "model": "crm.LandScoreChemical",
     "fields": {
-      "id":38,
-      "ec":6,
-      "nh4n":15,
-      "no3n":2,
-      "total_nitrogen":3,
-      "nh4_per_nitrogen":9,
-      "ph":5,
-      "cao":4,
-      "mgo":20,
-      "k2o":1,
-      "base_saturation":6,
-      "cao_per_mgo":3,
-      "mgo_per_k2o":6,
-      "phosphorus_absorption":2,
-      "p2o5":20,
-      "cec":14,
-      "humus":16,
-      "bulk_density":4,
-      "created_at":"2022-08-22T15:00:00+09:00",
-      "landblock_id": 2,
-      "landledger_id":5
-    }
-  },
-  {
-    "model": "crm.LandScoreChemical",
-    "fields": {
       "id":39,
       "ec":13,
       "nh4n":1,
@@ -1010,32 +568,6 @@
       "bulk_density":5,
       "created_at":"2022-08-23T15:00:00+09:00",
       "landblock_id": 3,
-      "landledger_id":5
-    }
-  },
-  {
-    "model": "crm.LandScoreChemical",
-    "fields": {
-      "id":40,
-      "ec":12,
-      "nh4n":10,
-      "no3n":11,
-      "total_nitrogen":11,
-      "nh4_per_nitrogen":3,
-      "ph":19,
-      "cao":5,
-      "mgo":3,
-      "k2o":18,
-      "base_saturation":14,
-      "cao_per_mgo":19,
-      "mgo_per_k2o":18,
-      "phosphorus_absorption":18,
-      "p2o5":18,
-      "cec":10,
-      "humus":1,
-      "bulk_density":16,
-      "created_at":"2022-08-24T15:00:00+09:00",
-      "landblock_id": 4,
       "landledger_id":5
     }
   },
@@ -1068,32 +600,6 @@
   {
     "model": "crm.LandScoreChemical",
     "fields": {
-      "id":42,
-      "ec":5,
-      "nh4n":2,
-      "no3n":8,
-      "total_nitrogen":14,
-      "nh4_per_nitrogen":16,
-      "ph":3,
-      "cao":18,
-      "mgo":3,
-      "k2o":14,
-      "base_saturation":9,
-      "cao_per_mgo":4,
-      "mgo_per_k2o":17,
-      "phosphorus_absorption":7,
-      "p2o5":10,
-      "cec":9,
-      "humus":7,
-      "bulk_density":14,
-      "created_at":"2022-08-26T15:00:00+09:00",
-      "landblock_id": 6,
-      "landledger_id":5
-    }
-  },
-  {
-    "model": "crm.LandScoreChemical",
-    "fields": {
       "id":43,
       "ec":2,
       "nh4n":13,
@@ -1114,32 +620,6 @@
       "bulk_density":12,
       "created_at":"2022-08-27T15:00:00+09:00",
       "landblock_id": 7,
-      "landledger_id":5
-    }
-  },
-  {
-    "model": "crm.LandScoreChemical",
-    "fields": {
-      "id":44,
-      "ec":14,
-      "nh4n":17,
-      "no3n":4,
-      "total_nitrogen":11,
-      "nh4_per_nitrogen":4,
-      "ph":16,
-      "cao":17,
-      "mgo":5,
-      "k2o":8,
-      "base_saturation":15,
-      "cao_per_mgo":20,
-      "mgo_per_k2o":20,
-      "phosphorus_absorption":14,
-      "p2o5":11,
-      "cec":13,
-      "humus":19,
-      "bulk_density":20,
-      "created_at":"2022-08-28T15:00:00+09:00",
-      "landblock_id": 8,
       "landledger_id":5
     }
   },
