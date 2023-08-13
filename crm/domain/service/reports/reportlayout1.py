@@ -1,6 +1,6 @@
 from django.db.models import Avg
 
-from crm.domain.services.reports.basereportlayout import BaseReportLayout
+from crm.domain.service.reports.basereportlayout import BaseReportLayout
 from crm.domain.valueobject.graph.matplotlib import Matplotlib
 from crm.models import LandLedger, LandScoreChemical
 

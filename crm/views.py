@@ -5,9 +5,9 @@ from django.core.management import call_command
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, TemplateView, FormView
 
-from crm.domain.services.reports.reportlayout1 import ReportLayout1
+from crm.domain.service.reports.reportlayout1 import ReportLayout1
 from crm.domain.repository.landrepository import LandRepository
-from crm.domain.services.zipfileservice import ZipFileService
+from crm.domain.service.zipfileservice import ZipFileService
 from crm.forms import CompanyCreateForm, LandCreateForm, UploadZipForm
 from crm.models import Company, Land, LandScoreChemical, LandReview, CompanyCategory, LandLedger, \
     SoilHardnessMeasurementImportErrors
