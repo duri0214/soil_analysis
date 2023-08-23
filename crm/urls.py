@@ -16,6 +16,5 @@ urlpatterns = [
     path('company/<int:company_id>/landledger/<int:landledger_id>/land_report_chemical',
          views.LandReportChemicalListView.as_view(), name='land_report_chemical'),
     path('upload/soilhardness', views.UploadSoilhardnessView.as_view(), name='upload_soilhardness'),
-    path('upload/success/', views.UploadZipSuccessView.as_view(), name='upload_soilhardness_success'),
     path('upload/soilhardness/success', views.UploadZipSuccessView.as_view(), name='upload_soilhardness_success'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
