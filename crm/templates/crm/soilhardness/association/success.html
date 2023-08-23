@@ -10,7 +10,7 @@
     </nav>
 {% endblock %}
 {% block content %}
-    <h1>Upload Successful</h1>
+    <h1>Association Successful</h1>
     {% if import_errors %}
         <p>処理は成功しましたが、エラーが発生したデータがあります。詳細は以下のテーブルをご確認ください。</p>
         <table class="table table-bordered table-gray table-striped">
@@ -34,7 +34,7 @@
             </tbody>
         </table>
     {% else %}
-        <p>No import errors.</p>
-        <a class="btn btn-outline-primary mb-3" href="#" role="button">取り込みデータのアサインへ進む</a>
+        <p>関連付けが成功しました！</p>
+        <a class="btn btn-outline-primary mb-3" href="#" role="button">XXXXへ進む</a>
     {% endif %}
 {% endblock %}

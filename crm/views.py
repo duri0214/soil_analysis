@@ -2,6 +2,8 @@ import os
 import shutil
 
 from django.core.management import call_command
+from django.db.models import Count
+from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, TemplateView, FormView
 
@@ -10,7 +12,7 @@ from crm.domain.repository.landrepository import LandRepository
 from crm.domain.service.zipfileservice import ZipFileService
 from crm.forms import CompanyCreateForm, LandCreateForm, UploadZipForm
 from crm.models import Company, Land, LandScoreChemical, LandReview, CompanyCategory, LandLedger, \
-    SoilHardnessMeasurementImportErrors
+    SoilHardnessMeasurementImportErrors, SoilHardnessMeasurement, LandBlock
 
 
 class Home(TemplateView):
@@ -107,7 +109,7 @@ class LandReportChemicalListView(ListView):
 
 
 class UploadSoilhardnessView(FormView):
-    template_name = 'crm/soilhardness/upload.html'
+    template_name = 'crm/soilhardness/upload/form.html'
     form_class = UploadZipForm
     success_url = reverse_lazy('crm:upload_soilhardness_success')
 
@@ -122,9 +124,64 @@ class UploadSoilhardnessView(FormView):
 
 
 class UploadZipSuccessView(TemplateView):
-    template_name = 'crm/soilhardness/success.html'
+    template_name = 'crm/soilhardness/upload/success.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['import_errors'] = SoilHardnessMeasurementImportErrors.objects.all()
         return context
+
+
+class AssociationView(ListView):
+    model = SoilHardnessMeasurement
+    template_name = 'crm/soilhardness/association/list.html'
+
+    def get_queryset(self, **kwargs):
+        return super().get_queryset() \
+            .filter(landblock__isnull=True) \
+            .values('setmemory', 'setdatetime') \
+            .annotate(cnt=Count('id')) \
+            .order_by('setmemory')
+
+    @staticmethod
+    def post(request, **kwargs):
+        # TODO: R をつけた25レコードに対して5レコードずつ順に C1, C3, A3, B2, A1 を付与
+        #  リストにappendしてバルク更新
+        checkboxes = request.POST.getlist('checkboxes[]')
+        print(f'checkboxes: {checkboxes}')
+
+        return HttpResponseRedirect(reverse('crm:association_success'))
+
+
+class AssociationIndividualView(ListView):
+    model = SoilHardnessMeasurement
+    template_name = 'crm/soilhardness/association/individual/list.html'
+
+    def get_queryset(self, **kwargs):
+        first_memory_number = self.kwargs.get('memory_anchor')
+        return super().get_queryset() \
+            .filter(setmemory__range=(first_memory_number, first_memory_number + 24)) \
+            .values('setmemory', 'setdatetime') \
+            .annotate(cnt=Count('id')) \
+            .order_by('setmemory')
+
+    def get_context_data(self, **kwargs):
+        first_memory_number = self.kwargs.get('memory_anchor')
+        context = super().get_context_data(**kwargs)
+        context['memory_anchor'] = first_memory_number
+        context['land_blocks'] = LandBlock.objects.order_by('id').all()
+        return context
+
+    @staticmethod
+    def post(request, **kwargs):
+        # TODO: first_memory_number を含んで25レコードに C1, C3, A3, B2, A1 を適用
+        #  リストにappendしてバルク更新
+        first_memory_number = kwargs.get('memory_anchor')
+        landblocks = request.POST.getlist('landblocks[]')
+        print(f'landblocks: {landblocks}')
+
+        return HttpResponseRedirect(reverse('crm:association'))
+
+
+class AssociationSuccessView(TemplateView):
+    template_name = 'crm/soilhardness/association/success.html'

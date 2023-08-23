@@ -1,0 +1,43 @@
+{% extends "crm/base.html" %}
+{% load static %}
+{% block header %}
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'crm:home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'crm:upload_soilhardness' %}">Upload soilhardness</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Association</li>
+        </ol>
+    </nav>
+{% endblock %}
+{% block content %}
+    <h1>データの関連付け</h1>
+    <form method="post" action="{% url 'crm:association' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input class="btn btn-outline-primary mb-3" type="submit" name="button" value="送信">
+        <table class="table table-bordered table-gray table-striped">
+            <thead>
+                <tr>
+                    <th>memory</th>
+                    <th>datetime</th>
+                    <th>count</th>
+                    <th class="centered">R</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for measurement in object_list %}
+                    <tr>
+                        <td>{{ measurement.setmemory }}</td>
+                        <td>{{ measurement.setdatetime|date:"Y-m-d" }}</td>
+                        <td>{{ measurement.cnt }}</td>
+                        {% if forloop.counter0|divisibleby:25 %}
+                        <td rowspan="5">
+                            <input class="form-check-input centered" type="checkbox" name="checkboxes[]" value="{{ measurement.setmemory }}" aria-label="Rのかたちに25データを定義">
+                            <p><a href="{% url 'crm:association_individual' measurement.setmemory %}">圃場をRパターン以外で登録</a></p>
+                        </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </form>
+{% endblock %}

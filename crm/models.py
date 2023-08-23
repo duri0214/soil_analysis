@@ -250,6 +250,7 @@ class SoilHardnessMeasurement(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(null=True)
     setdevice = models.ForeignKey(Device, on_delete=models.CASCADE)
+    landblock = models.ForeignKey(LandBlock, null=True, on_delete=models.CASCADE)
 
     class Meta:
         constraints = [
