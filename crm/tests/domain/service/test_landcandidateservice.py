@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from crm.domain.services.landcandidateservice import LandCandidateService
+from crm.domain.service.landcandidateservice import LandCandidateService
 from crm.domain.valueobject.landcandidates import LandCandidates
 
 

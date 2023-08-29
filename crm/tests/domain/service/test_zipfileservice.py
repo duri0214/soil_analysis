@@ -5,7 +5,7 @@ import zipfile
 from django.core.files.base import ContentFile
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.test import TestCase, override_settings
-from crm.domain.services.zipfileservice import ZipFileService
+from crm.domain.service.zipfileservice import ZipFileService
 
 
 class ZipFileServiceTestCase(TestCase):

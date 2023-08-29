@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from crm.domain.services.photoprocessingservice import PhotoProcessingService
+from crm.domain.service.photoprocessingservice import PhotoProcessingService
 from crm.domain.valueobject.capturelocation import CaptureLocation
 from crm.domain.valueobject.coords.capturelocationcoords import CaptureLocationCoords
 from crm.domain.valueobject.coords.landcoords import LandCoords
