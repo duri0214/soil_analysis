@@ -13,7 +13,3 @@ class BasePhoto:
     @abstractmethod
     def _extract_location(self) -> float:
         pass
-
-    @abstractmethod
-    def _extract_azimuth(self) -> float:
-        pass

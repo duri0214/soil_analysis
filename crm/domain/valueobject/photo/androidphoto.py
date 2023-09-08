@@ -16,9 +16,6 @@ class AndroidPhoto(BasePhoto):
         self.date = self._extract_date()
         self.location = self._extract_location()
 
-        # TODO: Androidには azimuth（方位角） 情報がなさそう...
-        # self.azimuth = self._extract_azimuth()
-
     def _extract_exif_data(self) -> dict:
         with open(self.filepath, "rb") as f:
             file_data = f.read()
@@ -52,9 +49,6 @@ class AndroidPhoto(BasePhoto):
             raise ValueError("Invalid GPSLatitude value: None")
 
         return CaptureLocation(self._convert_to_degrees(gps_longitude), self._convert_to_degrees(gps_latitude))
-
-    def _extract_azimuth(self):
-        pass
 
     @staticmethod
     def _convert_to_degrees(coord: exifread.classes.IfdTag):
