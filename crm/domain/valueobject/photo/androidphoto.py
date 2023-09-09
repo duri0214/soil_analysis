@@ -29,9 +29,9 @@ class AndroidPhoto(BasePhoto):
         return exif_data
 
     def _extract_date(self) -> str:
-        gps_date = self.exif_data.get('GPS GPSDate')
+        gps_date = self.exif_data.get('Image DateTime')
         if gps_date is None:
-            raise ValueError("Invalid GPSDate value: None")
+            raise ValueError("Invalid Image DateTime value: None")
 
         match = re.search(r'\d{4}:\d{2}:\d{2}', str(gps_date))
         if match:

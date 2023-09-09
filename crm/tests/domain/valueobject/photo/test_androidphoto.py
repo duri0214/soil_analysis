@@ -12,12 +12,12 @@ class TestAndroidPhoto(TestCase):
 
     def test_extract_date(self):
         # 正常な値のテスト
-        expected_date = "2023-08-26"
+        expected_date = "2023-08-27"
         actual_date = self.android_photo._extract_date()
         self.assertEqual(expected_date, actual_date)
 
         # GPS GPSDate が None の場合のテスト
-        self.android_photo.exif_data["GPS GPSDate"] = None
+        self.android_photo.exif_data["Image DateTime"] = None
         with self.assertRaises(ValueError):
             self.android_photo._extract_date()
 
