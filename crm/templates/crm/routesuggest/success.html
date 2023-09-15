@@ -1,0 +1,35 @@
+{% extends "crm/base.html" %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static "crm/css/routesuggest/style.css" %}" />
+{% endblock %}
+{% block additional_head %}
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script type="module" src="{% static "crm/js/routesuggest/gmap_direction.js" %}"></script>
+{% endblock %}
+{% block header %}
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'crm:home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'crm:routesuggest_upload' %}">KML Upload</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Upload success</li>
+        </ol>
+    </nav>
+{% endblock %}
+{% block content %}
+    <h1>Upload Successful</h1>
+    <p>取り込んだルートを最適化して作業指示書を作成しました</p>
+
+    <div id="map"></div>
+    <!--
+      The `defer` attribute causes the callback to execute after the full HTML
+      document has been parsed. For non-blocking uses, avoiding race conditions,
+      and consistent behavior across browsers, consider loading using Promises.
+      See https://developers.google.com/maps/documentation/javascript/load-maps-js-api
+      for more information.
+      -->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAhPDsXtgH9cuZexbk-UktIH97TNVaBbB4&callback=initMap&v=weekly"
+      defer
+    ></script>
+{% endblock %}

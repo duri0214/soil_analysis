@@ -1,0 +1,20 @@
+{% extends "crm/base.html" %}
+{% load static %}
+{% block header %}
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'crm:home' %}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">KML Upload</li>
+        </ol>
+    </nav>
+{% endblock %}
+{% block content %}
+    <h1>KMLのアップロード</h1>
+    <p>KMLをアップロードしてください</p>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button disabled class="btn btn-outline-primary mb-3" type="submit">Upload</button>
+    </form>
+    <a href="{% url 'crm:routesuggest_success' %}">（デバッグ）つぎへ</a>
+{% endblock %}

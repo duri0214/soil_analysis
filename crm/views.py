@@ -185,3 +185,18 @@ class AssociationIndividualView(ListView):
 
 class AssociationSuccessView(TemplateView):
     template_name = 'crm/soilhardness/association/success.html'
+
+
+class RouteSuggestUploadView(TemplateView):
+    template_name = 'crm/routesuggest/form.html'
+
+
+class RouteSuggestSuccessView(TemplateView):
+    template_name = 'crm/routesuggest/success.html'
+    # TODO:
+    #  step1: xarvioで任意の圃場をKMLダウンロード
+    #  step2: KMLをアップロードして圃場のリストを作る（名称ではgooglemapでdirectionできないから、座標でもいいのかな）
+    #   KMLを読む（未使用の）ロジックはあるね crm/tests/domain/service/test_landcandidateservice.py
+    #   ["B0", "B2", "B4", "C5", "そば2", "リヴァンプ2", "ローソン4", "伊佐地4", "湖東中4", "山崎開発1", "小澤農園", "上4", "東大山1"]
+    #  step3: success.html から呼ばれる gmap_direction に、出発地、経由地（最大８）、到着地で当て込む
+    #  step4: 作業指示書としての体裁を整える
