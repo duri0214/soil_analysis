@@ -4,7 +4,7 @@
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{% url 'crm:home' %}">Home</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'crm:upload_soilhardness' %}">Upload soilhardness</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'crm:soilhardness_upload' %}">Upload soilhardness</a></li>
             <li class="breadcrumb-item active" aria-current="page">Upload success</li>
         </ol>
     </nav>
@@ -35,6 +35,6 @@
         </table>
     {% else %}
         <p>アップロードデータに異常はありませんでした！</p>
-        <a class="btn btn-outline-primary mb-3" href="{% url 'crm:association' %}" role="button">取り込みデータのアサインへ進む</a>
+        <a class="btn btn-outline-primary mb-3" href="{% url 'crm:soilhardness_association' %}" role="button">取り込みデータのアサインへ進む</a>
     {% endif %}
 {% endblock %}

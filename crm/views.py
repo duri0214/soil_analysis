@@ -108,10 +108,10 @@ class LandReportChemicalListView(ListView):
         return context
 
 
-class UploadSoilhardnessView(FormView):
-    template_name = 'crm/soilhardness/upload/form.html'
+class SoilhardnessUploadView(FormView):
+    template_name = 'crm/soilhardness/form.html'
     form_class = UploadZipForm
-    success_url = reverse_lazy('crm:upload_soilhardness_success')
+    success_url = reverse_lazy('crm:soilhardness_success')
 
     def form_valid(self, form):
         # Zipを処理してバッチ実行
@@ -123,8 +123,8 @@ class UploadSoilhardnessView(FormView):
         return super().form_valid(form)
 
 
-class UploadZipSuccessView(TemplateView):
-    template_name = 'crm/soilhardness/upload/success.html'
+class SoilhardnessSuccessView(TemplateView):
+    template_name = 'crm/soilhardness/success.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -132,7 +132,7 @@ class UploadZipSuccessView(TemplateView):
         return context
 
 
-class AssociationView(ListView):
+class SoilhardnessAssociationView(ListView):
     model = SoilHardnessMeasurement
     template_name = 'crm/soilhardness/association/list.html'
 
@@ -150,10 +150,10 @@ class AssociationView(ListView):
         checkboxes = request.POST.getlist('checkboxes[]')
         print(f'checkboxes: {checkboxes}')
 
-        return HttpResponseRedirect(reverse('crm:association_success'))
+        return HttpResponseRedirect(reverse('crm:soilhardness_association_success'))
 
 
-class AssociationIndividualView(ListView):
+class SoilhardnessAssociationIndividualView(ListView):
     model = SoilHardnessMeasurement
     template_name = 'crm/soilhardness/association/individual/list.html'
 
@@ -176,14 +176,14 @@ class AssociationIndividualView(ListView):
     def post(request, **kwargs):
         # TODO: first_memory_number を含んで25レコードに C1, C3, A3, B2, A1 を適用
         #  リストにappendしてバルク更新
-        first_memory_number = kwargs.get('memory_anchor')
+        # first_memory_number = kwargs.get('memory_anchor')
         landblocks = request.POST.getlist('landblocks[]')
         print(f'landblocks: {landblocks}')
 
-        return HttpResponseRedirect(reverse('crm:association'))
+        return HttpResponseRedirect(reverse('crm:soilhardness_association'))
 
 
-class AssociationSuccessView(TemplateView):
+class SoilhardnessAssociationSuccessView(TemplateView):
     template_name = 'crm/soilhardness/association/success.html'
 
 

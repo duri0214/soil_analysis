@@ -15,13 +15,13 @@ urlpatterns = [
     path('company/<int:company_id>/land/<int:pk>/detail', views.LandDetailView.as_view(), name='land_detail'),
     path('company/<int:company_id>/landledger/<int:landledger_id>/land_report_chemical',
          views.LandReportChemicalListView.as_view(), name='land_report_chemical'),
-    # TODO: upload/ は不要
-    path('upload/soilhardness', views.UploadSoilhardnessView.as_view(), name='upload_soilhardness'),
-    path('upload/soilhardness/success', views.UploadZipSuccessView.as_view(), name='upload_soilhardness_success'),
-    path('upload/soilhardness/association', views.AssociationView.as_view(), name='association'),
-    path('upload/soilhardness/association/individual/<int:memory_anchor>',
-         views.AssociationIndividualView.as_view(), name='association_individual'),
-    path('upload/soilhardness/association/success', views.AssociationSuccessView.as_view(), name='association_success'),
+    path('soilhardness/upload', views.SoilhardnessUploadView.as_view(), name='soilhardness_upload'),
+    path('soilhardness/success', views.SoilhardnessSuccessView.as_view(), name='soilhardness_success'),
+    path('soilhardness/association', views.SoilhardnessAssociationView.as_view(), name='soilhardness_association'),
+    path('soilhardness/association/individual/<int:memory_anchor>',
+         views.SoilhardnessAssociationIndividualView.as_view(), name='soilhardness_association_individual'),
+    path('soilhardness/association/success', views.SoilhardnessAssociationSuccessView.as_view(),
+         name='soilhardness_association_success'),
     path('routesuggest/upload', views.RouteSuggestUploadView.as_view(), name='routesuggest_upload'),
     path('routesuggest/success', views.RouteSuggestSuccessView.as_view(), name='routesuggest_success')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
