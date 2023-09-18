@@ -12,7 +12,7 @@
 {% endblock %}
 {% block content %}
     <h1>データの関連付け</h1>
-    <form method="post" action="{% url 'crm:soilhardness_association_individual' memory_anchor %}" enctype="multipart/form-data">
+    <form method="post" action="{% url 'crm:soilhardness_association_individual' memory_anchor landledger %}" enctype="multipart/form-data">
         {% csrf_token %}
         <input class="btn btn-outline-primary mb-3" type="submit" name="button" value="送信">
         <table class="table table-bordered table-gray table-striped">
@@ -34,7 +34,7 @@
                             <select class="form-select" name="landblocks[]" required aria-label="圃場ブロックを選択">
                                 <option selected disabled value="">選択してください</option>
                                 {% for land_block in land_blocks %}
-                                    <option value="{{ land_block.name }}">{{ land_block.name }}</option>
+                                    <option value="{{ land_block.pk }}">{{ land_block.name }}</option>
                                 {% endfor %}
                             </select>
                         </td>
