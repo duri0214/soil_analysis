@@ -12,7 +12,7 @@ from crm.domain.repository.landrepository import LandRepository
 from crm.domain.service.zipfileservice import ZipFileService
 from crm.forms import CompanyCreateForm, LandCreateForm, UploadZipForm
 from crm.models import Company, Land, LandScoreChemical, LandReview, CompanyCategory, LandLedger, \
-    SoilHardnessMeasurementImportErrors, SoilHardnessMeasurement, LandBlock
+    SoilHardnessMeasurementImportErrors, SoilHardnessMeasurement, LandBlock, SamplingOrder
 
 
 class Home(TemplateView):
@@ -140,15 +140,51 @@ class SoilhardnessAssociationView(ListView):
         return super().get_queryset() \
             .filter(landblock__isnull=True) \
             .values('setmemory', 'setdatetime') \
-            .annotate(cnt=Count('id')) \
+            .annotate(cnt=Count('pk')) \
             .order_by('setmemory')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['landledgers'] = LandLedger.objects.all().order_by('pk')
+        return context
 
     @staticmethod
     def post(request, **kwargs):
-        # TODO: R をつけた25レコードに対して5レコードずつ順に C1, C3, A3, B2, A1 を付与
-        #  リストにappendしてバルク更新
-        checkboxes = request.POST.getlist('checkboxes[]')
-        print(f'checkboxes: {checkboxes}')
+        """
+        R型 で登録するときは、圃場の1ブロックが5点計測なので、採土法（5点法、9点法）の回数を乗ずると、1圃場での採取回数になる
+        R型以外のときはIndividualViewへ飛ぶ
+        """
+        form_landledger = int(request.POST.get('landledger')[0])
+        if "btn_individual" in request.POST:
+            return HttpResponseRedirect(
+                reverse(
+                    'crm:soilhardness_association_individual',
+                    kwargs={
+                        'memory_anchor': int(request.POST.get('btn_individual')),
+                        'landledger': form_landledger
+                    })
+            )
+
+        form_checkboxes = [int(checkbox) for checkbox in request.POST.getlist('form_checkboxes[]')]
+        if form_checkboxes:
+            landledger = LandLedger.objects.filter(pk=form_landledger).first()
+            sampling_times = landledger.sampling_method.times
+            total_sampling_times = 5 * sampling_times
+            needle = 0
+            landblock_orders = SamplingOrder.objects \
+                .filter(sampling_method=landledger.sampling_method) \
+                .order_by('ordering')
+            for memory_anchor in form_checkboxes:
+                entities = SoilHardnessMeasurement.objects \
+                    .filter(setmemory__range=(memory_anchor, memory_anchor + (total_sampling_times - 1))) \
+                    .order_by('pk')
+                for i, entity in enumerate(entities):
+                    entity.landblock = landblock_orders[needle].landblock
+                    entity.landledger = landledger
+                    forward_the_needle = i > 0 and i % (entity.setdepth * sampling_times) == 0
+                    if forward_the_needle:
+                        needle += 1
+                SoilHardnessMeasurement.objects.bulk_update(entities, fields=["landblock", "landledger"])
 
         return HttpResponseRedirect(reverse('crm:soilhardness_association_success'))
 
