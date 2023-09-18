@@ -13,7 +13,20 @@
     <h1>データの関連付け</h1>
     <form method="post" action="{% url 'crm:soilhardness_association' %}" enctype="multipart/form-data">
         {% csrf_token %}
-        <input class="btn btn-outline-primary mb-3" type="submit" name="button" value="送信">
+        <div class="row">
+            <div class="dropdown col-6">
+                <select class="form-select" name="landledger" required aria-label="帳簿を選択">
+                    <option selected disabled value="">帳簿を選択</option>
+                    {% for landledger in landledgers %}
+                        <option value="{{ landledger.pk }}">{{ landledger.land.company.name }} {{ landledger.land.name }} {{ landledger.sampling_date|date:"Ym" }} {{ landledger.landperiod.name }}</option>
+                    {% endfor %}
+                    {# TODO: urlを帳簿の新規作成のページへ #}
+                    <option value="{{ landledger.pk }}"><a class="dropdown-item" href="https://www.google.com">新規作成（未実装）</a></option>
+                </select>
+            </div>
+            <input class="btn btn-outline-primary mb-3 col-2" type="submit" name="button" value="送信">
+        </div>
+
         <table class="table table-bordered table-gray table-striped">
             <thead>
                 <tr>
@@ -31,13 +44,26 @@
                         <td>{{ measurement.cnt }}</td>
                         {% if forloop.counter0|divisibleby:25 %}
                         <td rowspan="5">
-                            <input class="form-check-input centered" type="checkbox" name="checkboxes[]" value="{{ measurement.setmemory }}" aria-label="Rのかたちに25データを定義">
-                            <p><a href="{% url 'crm:soilhardness_association_individual' measurement.setmemory %}">圃場をRパターン以外で登録</a></p>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="form_checkboxes[]" value="{{ measurement.setmemory }}" id="form_checkbox">
+                                <label class="form-check-label" for="form_checkbox">
+                                    圃場をRパターンで登録
+                                </label>
+                            </div>
+                            <button class="btn btn-outline-secondary mb-3" type="submit" name="btn_individual" value="{{ measurement.setmemory }}">圃場をRパターン以外で登録</button>
                         </td>
                         {% endif %}
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
+        <input type="hidden" name="form_landledger" id="selected_landledger" value="">
     </form>
+    <script>
+        const dropdown = document.querySelector('.dropdown select');
+        const hiddenInput = document.getElementById('selected_landledger');
+        dropdown.addEventListener('change', (event) => {
+            hiddenInput.value = event.target.value;
+        });
+    </script>
 {% endblock %}
