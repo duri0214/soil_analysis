@@ -175,16 +175,17 @@ class SoilhardnessAssociationView(ListView):
                 .filter(sampling_method=landledger.sampling_method) \
                 .order_by('ordering')
             for memory_anchor in form_checkboxes:
-                entities = SoilHardnessMeasurement.objects \
+                soilhardness_measurements = SoilHardnessMeasurement.objects \
                     .filter(setmemory__range=(memory_anchor, memory_anchor + (total_sampling_times - 1))) \
                     .order_by('pk')
-                for i, entity in enumerate(entities):
-                    entity.landblock = landblock_orders[needle].landblock
-                    entity.landledger = landledger
-                    forward_the_needle = i > 0 and i % (entity.setdepth * sampling_times) == 0
+                for i, soilhardness_measurement in enumerate(soilhardness_measurements):
+                    soilhardness_measurement.landblock = landblock_orders[needle].landblock
+                    soilhardness_measurement.landledger = landledger
+                    forward_the_needle = i > 0 and i % (soilhardness_measurement.setdepth * sampling_times) == 0
                     if forward_the_needle:
                         needle += 1
-                SoilHardnessMeasurement.objects.bulk_update(entities, fields=["landblock", "landledger"])
+                SoilHardnessMeasurement.objects.bulk_update(soilhardness_measurements,
+                                                            fields=["landblock", "landledger"])
 
         return HttpResponseRedirect(reverse('crm:soilhardness_association_success'))
 
