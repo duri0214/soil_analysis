@@ -18,7 +18,7 @@ urlpatterns = [
     path('soilhardness/upload', views.SoilhardnessUploadView.as_view(), name='soilhardness_upload'),
     path('soilhardness/success', views.SoilhardnessSuccessView.as_view(), name='soilhardness_success'),
     path('soilhardness/association', views.SoilhardnessAssociationView.as_view(), name='soilhardness_association'),
-    path('soilhardness/association/individual/<int:memory_anchor>',
+    path('soilhardness/association/individual/<int:memory_anchor>/<int:landledger>',
          views.SoilhardnessAssociationIndividualView.as_view(), name='soilhardness_association_individual'),
     path('soilhardness/association/success', views.SoilhardnessAssociationSuccessView.as_view(),
          name='soilhardness_association_success'),

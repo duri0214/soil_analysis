@@ -12,7 +12,7 @@ from crm.domain.repository.landrepository import LandRepository
 from crm.domain.service.zipfileservice import ZipFileService
 from crm.forms import CompanyCreateForm, LandCreateForm, UploadZipForm
 from crm.models import Company, Land, LandScoreChemical, LandReview, CompanyCategory, LandLedger, \
-    SoilHardnessMeasurementImportErrors, SoilHardnessMeasurement, LandBlock
+    SoilHardnessMeasurementImportErrors, SoilHardnessMeasurement, LandBlock, SamplingOrder
 
 
 class Home(TemplateView):
@@ -140,15 +140,52 @@ class SoilhardnessAssociationView(ListView):
         return super().get_queryset() \
             .filter(landblock__isnull=True) \
             .values('setmemory', 'setdatetime') \
-            .annotate(cnt=Count('id')) \
+            .annotate(cnt=Count('pk')) \
             .order_by('setmemory')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['landledgers'] = LandLedger.objects.all().order_by('pk')
+        return context
 
     @staticmethod
     def post(request, **kwargs):
-        # TODO: R をつけた25レコードに対して5レコードずつ順に C1, C3, A3, B2, A1 を付与
-        #  リストにappendしてバルク更新
-        checkboxes = request.POST.getlist('checkboxes[]')
-        print(f'checkboxes: {checkboxes}')
+        """
+        R型 で登録するときは、圃場の1ブロックが5点計測なので、採土法（5点法、9点法）の回数を乗ずると、1圃場での採取回数になる
+        R型以外のときはIndividualViewへ飛ぶ
+        """
+        form_landledger = int(request.POST.get('landledger')[0])
+        if "btn_individual" in request.POST:
+            return HttpResponseRedirect(
+                reverse(
+                    'crm:soilhardness_association_individual',
+                    kwargs={
+                        'memory_anchor': int(request.POST.get('btn_individual')),
+                        'landledger': form_landledger
+                    })
+            )
+
+        form_checkboxes = [int(checkbox) for checkbox in request.POST.getlist('form_checkboxes[]')]
+        if form_checkboxes:
+            landledger = LandLedger.objects.filter(pk=form_landledger).first()
+            sampling_times = landledger.sampling_method.times
+            total_sampling_times = 5 * sampling_times
+            needle = 0
+            landblock_orders = SamplingOrder.objects \
+                .filter(sampling_method=landledger.sampling_method) \
+                .order_by('ordering')
+            for memory_anchor in form_checkboxes:
+                soilhardness_measurements = SoilHardnessMeasurement.objects \
+                    .filter(setmemory__range=(memory_anchor, memory_anchor + (total_sampling_times - 1))) \
+                    .order_by('pk')
+                for i, soilhardness_measurement in enumerate(soilhardness_measurements):
+                    soilhardness_measurement.landblock = landblock_orders[needle].landblock
+                    soilhardness_measurement.landledger = landledger
+                    forward_the_needle = i > 0 and i % (soilhardness_measurement.setdepth * sampling_times) == 0
+                    if forward_the_needle:
+                        needle += 1
+                SoilHardnessMeasurement.objects.bulk_update(soilhardness_measurements,
+                                                            fields=["landblock", "landledger"])
 
         return HttpResponseRedirect(reverse('crm:soilhardness_association_success'))
 
@@ -158,27 +195,46 @@ class SoilhardnessAssociationIndividualView(ListView):
     template_name = 'crm/soilhardness/association/individual/list.html'
 
     def get_queryset(self, **kwargs):
-        first_memory_number = self.kwargs.get('memory_anchor')
+        form_memory_anchor = self.kwargs.get('memory_anchor')
+        form_landledger = self.kwargs.get('landledger')
+        landledger = LandLedger.objects.filter(pk=form_landledger).first()
+        total_sampling_times = 5 * landledger.sampling_method.times
         return super().get_queryset() \
-            .filter(setmemory__range=(first_memory_number, first_memory_number + 24)) \
+            .filter(setmemory__range=(form_memory_anchor, form_memory_anchor + (total_sampling_times - 1))) \
             .values('setmemory', 'setdatetime') \
-            .annotate(cnt=Count('id')) \
+            .annotate(cnt=Count('pk')) \
             .order_by('setmemory')
 
     def get_context_data(self, **kwargs):
-        first_memory_number = self.kwargs.get('memory_anchor')
+        form_memory_anchor = self.kwargs.get('memory_anchor')
+        form_landledger = self.kwargs.get('landledger')
         context = super().get_context_data(**kwargs)
-        context['memory_anchor'] = first_memory_number
-        context['land_blocks'] = LandBlock.objects.order_by('id').all()
+        context['memory_anchor'] = form_memory_anchor
+        context['landledger'] = form_landledger
+        context['land_blocks'] = LandBlock.objects.order_by('pk').all()
         return context
 
-    @staticmethod
-    def post(request, **kwargs):
-        # TODO: first_memory_number を含んで25レコードに C1, C3, A3, B2, A1 を適用
-        #  リストにappendしてバルク更新
-        # first_memory_number = kwargs.get('memory_anchor')
-        landblocks = request.POST.getlist('landblocks[]')
-        print(f'landblocks: {landblocks}')
+    def post(self, request, **kwargs):
+        """
+        R型 以外で登録したいとき
+        フォームから25レコードの情報がくるのでそれぞれを更新する
+        """
+        form_memory_anchor = self.kwargs.get('memory_anchor')
+        form_landledger = self.kwargs.get('landledger')
+        form_landblocks = request.POST.getlist('landblocks[]')
+        landledger = LandLedger.objects.filter(pk=form_landledger).first()
+        total_sampling_times = 5 * landledger.sampling_method.times
+        soilhardness_measurements = SoilHardnessMeasurement.objects \
+            .filter(setmemory__range=(form_memory_anchor, form_memory_anchor + (total_sampling_times - 1))) \
+            .order_by('pk')
+        for i, soilhardness_measurement in enumerate(soilhardness_measurements):
+            needle = i // 60
+            soilhardness_measurement.landblock_id = form_landblocks[needle]
+            soilhardness_measurement.landledger = landledger
+        SoilHardnessMeasurement.objects.bulk_update(soilhardness_measurements,
+                                                    fields=["landblock", "landledger"])
+        if SoilHardnessMeasurement.objects.filter(landblock__isnull=True).count() == 0:
+            return HttpResponseRedirect(reverse('crm:soilhardness_association_success'))
 
         return HttpResponseRedirect(reverse('crm:soilhardness_association'))
 

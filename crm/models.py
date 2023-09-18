@@ -125,8 +125,11 @@ class Land(models.Model):
 class SamplingMethod(models.Model):
     """
     採土法マスタ e.g. 5点法
+    本当は採土法1つに対して型（R型など）を複数登録する `SamplingMethodType` のようなものが OneToMany であるとよいが
+    実質5点法の `R` で取りつづけると思うので仕様としては省略
     """
     name = models.CharField(max_length=256)
+    times = models.IntegerField()
     remark = models.TextField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(null=True)
@@ -157,6 +160,20 @@ class LandLedger(models.Model):
                 name="land_landperiod_unique"
             ),
         ]
+
+
+class SamplingOrder(models.Model):
+    """
+    採土法の採土順
+    本当は採土法1つに対して型（R型など）を複数登録する `SamplingMethodType` のようなものが OneToMany であるとよいが
+    実質5点法の `R` で取りつづけると思うので仕様としては省略
+    """
+    ordering = models.IntegerField()
+    remark = models.TextField(null=True)
+    landblock = models.ForeignKey(LandBlock, on_delete=models.CASCADE)
+    sampling_method = models.ForeignKey(SamplingMethod, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(null=True)
 
 
 class LandScoreChemical(models.Model):
@@ -251,6 +268,7 @@ class SoilHardnessMeasurement(models.Model):
     updated_at = models.DateTimeField(null=True)
     setdevice = models.ForeignKey(Device, on_delete=models.CASCADE)
     landblock = models.ForeignKey(LandBlock, null=True, on_delete=models.CASCADE)
+    landledger = models.ForeignKey(LandLedger, null=True, on_delete=models.CASCADE)
 
     class Meta:
         constraints = [

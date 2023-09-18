@@ -22,6 +22,7 @@ python manage.py loaddata .\crm\fixtures\landperiod.json
 python manage.py loaddata .\crm\fixtures\cultivationtype.json
 python manage.py loaddata .\crm\fixtures\land.json
 python manage.py loaddata .\crm\fixtures\samplingmethod.json
+python manage.py loaddata .\crm\fixtures\samplingorder.json
 python manage.py loaddata .\crm\fixtures\landledger.json
 python manage.py loaddata .\crm\fixtures\landreview.json
 python manage.py loaddata .\crm\fixtures\landscorechemical.json
