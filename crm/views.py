@@ -195,11 +195,14 @@ class SoilhardnessAssociationIndividualView(ListView):
     template_name = 'crm/soilhardness/association/individual/list.html'
 
     def get_queryset(self, **kwargs):
-        first_memory_number = self.kwargs.get('memory_anchor')
+        form_memory_anchor = self.kwargs.get('memory_anchor')
+        form_landledger = self.kwargs.get('landledger')
+        landledger = LandLedger.objects.filter(pk=form_landledger).first()
+        total_sampling_times = 5 * landledger.sampling_method.times
         return super().get_queryset() \
-            .filter(setmemory__range=(first_memory_number, first_memory_number + 24)) \
+            .filter(setmemory__range=(form_memory_anchor, form_memory_anchor + (total_sampling_times - 1))) \
             .values('setmemory', 'setdatetime') \
-            .annotate(cnt=Count('id')) \
+            .annotate(cnt=Count('pk')) \
             .order_by('setmemory')
 
     def get_context_data(self, **kwargs):
