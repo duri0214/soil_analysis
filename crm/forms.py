@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import ClearableFileInput
 
 from .models import Company, Land
 
@@ -65,5 +66,5 @@ class LandCreateForm(forms.ModelForm):
         return name
 
 
-class UploadZipForm(forms.Form):
-    zipfile = forms.FileField()
+class UploadForm(forms.Form):
+    file = forms.FileField(widget=ClearableFileInput(attrs={"class": "form-control"}))
