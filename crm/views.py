@@ -10,7 +10,7 @@ from django.views.generic import ListView, CreateView, DetailView, TemplateView,
 from crm.domain.service.reports.reportlayout1 import ReportLayout1
 from crm.domain.repository.landrepository import LandRepository
 from crm.domain.service.zipfileservice import ZipFileService
-from crm.forms import CompanyCreateForm, LandCreateForm, UploadZipForm
+from crm.forms import CompanyCreateForm, LandCreateForm, UploadForm
 from crm.models import Company, Land, LandScoreChemical, LandReview, CompanyCategory, LandLedger, \
     SoilHardnessMeasurementImportErrors, SoilHardnessMeasurement, LandBlock, SamplingOrder
 
@@ -110,12 +110,12 @@ class LandReportChemicalListView(ListView):
 
 class SoilhardnessUploadView(FormView):
     template_name = 'crm/soilhardness/form.html'
-    form_class = UploadZipForm
+    form_class = UploadForm
     success_url = reverse_lazy('crm:soilhardness_success')
 
     def form_valid(self, form):
         # Zipを処理してバッチ実行
-        upload_folder = ZipFileService.handle_uploaded_zip(self.request.FILES['zipfile'])
+        upload_folder = ZipFileService.handle_uploaded_zip(self.request.FILES['file'])
         if os.path.exists(upload_folder):
             call_command('import_soil_hardness', upload_folder)
             shutil.rmtree(upload_folder)
