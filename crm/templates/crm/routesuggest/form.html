@@ -10,11 +10,11 @@
 {% endblock %}
 {% block content %}
     <h1>KMLのアップロード</h1>
-    <p>KMLをアップロードしてください</p>
+    <p><a href="https://fm.xarvio.com/jp/ja_jp/login" target="_blank" rel="noopener noreferrer">Xarvio</a> から地点データをKMLでダウンロードしてアップロードしてください</p>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
-        <button disabled class="btn btn-outline-primary mb-3" type="submit">Upload</button>
+        <button class="btn btn-outline-primary mb-3" type="submit">Upload</button>
     </form>
     <a href="{% url 'crm:routesuggest_success' %}">（デバッグ）つぎへ</a>
 {% endblock %}
