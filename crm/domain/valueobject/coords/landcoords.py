@@ -22,8 +22,10 @@ class LandCoords(BaseCoords):
         self.longitude = round(self.longitude_sum / self.num_points, 7)
         self.latitude = round(self.latitude_sum / self.num_points, 7)
 
-    def get_coords(self) -> Tuple[float, float]:
-        return self.longitude, self.latitude
+    def get_coords(self, to_str: bool = False) -> Tuple[float, float] or str:
+        coordinates_tuple = self.longitude, self.latitude
+        coordinates_str = f"{coordinates_tuple[0]}, {coordinates_tuple[1]}"
+        return coordinates_tuple if to_str is False else coordinates_str
 
     def to_googlemapcoords(self) -> GoogleMapCoords:
         return GoogleMapCoords(self.latitude, self.longitude)
