@@ -17,6 +17,11 @@ class LandCandidateService:
         Args:
             kml_str (str): KML形式の文字列データ。
 
+        Notes: xarvioなら以下でOK
+            upload_file: InMemoryUploadedFile = self.request.FILES['file']
+            kml_raw = upload_file.read()
+            land_candidate_service = LandCandidateService()
+
         Returns:
             LandCandidates: 解析されたLandCandidatesオブジェクト。
 
