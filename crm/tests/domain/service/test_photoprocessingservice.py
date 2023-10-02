@@ -63,7 +63,7 @@ class TestPhotoProcessingService(TestCase):
     def test_process_photos(self):
         service = PhotoProcessingService()
         processed_photos = service.process_photos(self.photo_paths, self.land_candidates)
-        # 期待される処理後の写真のリストと一致するか検証する
+        # 期待される処理後の写真のリストと一致するか検証する ススムは 6/18 のグーグルフォトにある
         expected_processed_photos = [
             "D:/OneDrive/dev/soil_analysisローカルデータ/サンプルデータ/android/ススムＢ1_right.jpg",
             "D:/OneDrive/dev/soil_analysisローカルデータ/サンプルデータ/android/ススムB2.jpg"
