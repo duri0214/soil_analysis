@@ -1,18 +1,22 @@
 import os
 import shutil
 
+from django.contrib import messages
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.management import call_command
 from django.db.models import Count
 from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, TemplateView, FormView
 
+from crm.domain.service.landcandidateservice import LandCandidateService
 from crm.domain.service.reports.reportlayout1 import ReportLayout1
 from crm.domain.repository.landrepository import LandRepository
 from crm.domain.service.zipfileservice import ZipFileService
 from crm.forms import CompanyCreateForm, LandCreateForm, UploadForm
 from crm.models import Company, Land, LandScoreChemical, LandReview, CompanyCategory, LandLedger, \
-    SoilHardnessMeasurementImportErrors, SoilHardnessMeasurement, LandBlock, SamplingOrder
+    SoilHardnessMeasurementImportErrors, SoilHardnessMeasurement, LandBlock, SamplingOrder, RouteSuggestImport
 
 
 class Home(TemplateView):
@@ -243,8 +247,47 @@ class SoilhardnessAssociationSuccessView(TemplateView):
     template_name = 'crm/soilhardness/association/success.html'
 
 
-class RouteSuggestUploadView(TemplateView):
+class RouteSuggestUploadView(FormView):
     template_name = 'crm/routesuggest/form.html'
+    form_class = UploadForm
+    success_url = reverse_lazy('crm:routesuggest_ordering')
+
+    def form_valid(self, form):
+        upload_file: InMemoryUploadedFile = self.request.FILES['file']
+        kml_raw = upload_file.read()
+        land_candidate_service = LandCandidateService()
+        entities = []
+        for land_candidate in land_candidate_service.parse_kml(kml_raw).list():
+            coordinates_str = land_candidate.center.to_googlemapcoords().get_coords(to_str=True)
+            entity = RouteSuggestImport.objects.create(name=land_candidate.name, coords=coordinates_str)
+            entities.append(entity)
+        RouteSuggestImport.objects.all().delete()
+        RouteSuggestImport.objects.bulk_create(entities)
+
+        return super().form_valid(form)
+
+
+class RouteSuggestOrderingView(ListView):
+    model = RouteSuggestImport
+    template_name = "crm/routesuggest/ordering.html"
+
+    def post(self, request, *args, **kwargs):
+        order_data = self.request.POST.get('order_data')
+
+        try:
+            if order_data:
+                order_ids = order_data.split(",")
+                for order, order_id in enumerate(order_ids, start=1):
+                    route_suggest = RouteSuggestImport.objects.get(pk=order_id)
+                    route_suggest.ordering = order
+                    route_suggest.save()
+
+            messages.success(request, "Data updated successfully")
+            return redirect(reverse_lazy('crm:routesuggest_success'))
+
+        except RouteSuggestImport.DoesNotExist:
+            messages.error(request, "Invalid order data provided.")
+            return redirect(request.META.get('HTTP_REFERER'))
 
 
 class RouteSuggestSuccessView(TemplateView):
