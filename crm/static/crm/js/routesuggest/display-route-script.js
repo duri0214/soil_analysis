@@ -9,29 +9,33 @@ function initMap() {
     directionsRenderer.setMap(map);
 
     displayRoute(
-        "磐田駅",  // TODO: 出発地
-        "浜松駅",  // TODO: 到着地
+        route_suggest_list,
         directionsService,
         directionsRenderer,
     );
 }
 
 /**
- * @param origin 出発地
- * @param destination 到着地
+ * @param route_suggest_list
  * @param service directionsService
  * @param display directionsRenderer
  * @see https://developers.google.com/maps/documentation/javascript/reference/directions?hl=ja#DirectionsRequest
  */
-function displayRoute(origin, destination, service, display) {
+function displayRoute(route_suggest_list, service, display) {
+    if (route_suggest_list.length < 2) {
+        alert("少なくとも 2 つの場所を指定してください");
+        return;
+    }
+    if (route_suggest_list.length > 8) {
+        alert("場所が多すぎます。許可される最大場所数は 8 です");
+        return;
+    }
+
     service
         .route({
-            origin: origin,
-            destination: destination,
-            waypoints: [
-                { location: "浜松鑑定団" },  // TODO: 経由地1
-                { location: "磐田市香りの博物館" },  //TODO: 経由地2
-            ],
+            origin: route_suggest_list.shift(),
+            destination: route_suggest_list.pop(),
+            waypoints: route_suggest_list.map(location => ({ location })),
             travelMode: google.maps.TravelMode.DRIVING,
             avoidTolls: true,  // 有料道路を除外
             optimizeWaypoints: true  // 地点最適化
