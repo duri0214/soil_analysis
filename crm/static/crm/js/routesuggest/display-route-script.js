@@ -17,12 +17,12 @@ function initMap() {
 
 /**
  * @param coords_list
- * @param service directionsService
+ * @param directionsService directionsService
  * @param display directionsRenderer
  * @see https://developers.google.com/maps/documentation/javascript/reference/directions?hl=ja#DirectionsRequest
  */
-function displayRoute(coords_list, service, display) {
-    service
+function displayRoute(coords_list, directionsService, display) {
+    directionsService
         .route({
             origin: coords_list.shift(),
             destination: coords_list.pop(),
