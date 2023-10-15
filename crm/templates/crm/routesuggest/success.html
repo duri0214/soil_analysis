@@ -25,11 +25,11 @@
     <p>取り込んだルートを最適化して作業指示書を作成しました</p>
 
     <div id="map"></div>
-    <ul>
-        {% for land in route_suggest_list %}
-            <li id="{{ land.id }}" class="list-group-item">圃場名: {{ land.name }}, 座標: {{ land.coords }}</li>
+    <ol class="list-group list-group-numbered">
+        {% for land in land_list %}
+            <li id="{{ land.id }}" class="list-group-item">{{ land.name }}（{{ land.coords }}）</li>
         {% endfor %}
-    </ul>
+    </ol>
 
     <!--
       The `defer` attribute causes the callback to execute after the full HTML
