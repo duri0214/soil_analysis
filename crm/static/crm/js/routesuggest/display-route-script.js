@@ -1,18 +1,39 @@
 function initMap() {
     const directionsService = new google.maps.DirectionsService();
     const directionsRenderer = new google.maps.DirectionsRenderer();
+
+    const [latitudeMean, longitudeMean] = calculateCoordsMean(coordsList);
     const map = new google.maps.Map(document.getElementById("map"), {
         zoom: 7,
-        center: { lat: 34.710734511056266, lng: 137.85243458835393 },
+        center: { lat: latitudeMean, lng: longitudeMean },
     });
 
     directionsRenderer.setMap(map);
 
     displayRoute(
-        coords_list,
+        coordsList,
         directionsService,
         directionsRenderer,
     );
+}
+
+function calculateCoordsMean(coordsList) {
+    let totalLatitude = 0;
+    let totalLongitude = 0;
+
+    // 各座標の緯度と経度を合計
+    for (const coord of coordsList) {
+        const [latitude, longitude] = coord.split(',').map(parseFloat);
+        totalLatitude += latitude;
+        totalLongitude += longitude;
+    }
+
+    // 平均を計算
+    const latitudeMean = totalLatitude / coordsList.length;
+    const longitudeMean = totalLongitude / coordsList.length;
+
+    // 緯度と経度の平均をタプルで返す
+    return [latitudeMean, longitudeMean];
 }
 
 /**

@@ -7,7 +7,7 @@
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <script type="module" src="{% static "crm/js/routesuggest/display-route-script.js" %}"></script>
     {% autoescape off %}
-        <script>let coords_list = {{ coords_list }};</script>
+        <script>let coordsList = {{ coords_list }};</script>
     {% endautoescape %}
 {% endblock %}
 {% block header %}
