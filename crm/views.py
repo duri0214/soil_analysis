@@ -253,11 +253,26 @@ class RouteSuggestUploadView(FormView):
     success_url = reverse_lazy('crm:routesuggest_ordering')
 
     def form_valid(self, form):
+        """
+        Notes: Directions API の地点を制限する
+         可能であれば、クエリでのユーザー入力を最大 10 地点に制限します。10 を超える地点を含むリクエストは、課金レートが高くなります。
+         https://developers.google.com/maps/optimization-guide?hl=ja#routes
+        """
         upload_file: InMemoryUploadedFile = self.request.FILES['file']
         kml_raw = upload_file.read()
         land_candidate_service = LandCandidateService()
+        land_candidates = land_candidate_service.parse_kml(kml_raw).list()
+
+        if len(land_candidates) < 2:
+            messages.error(self.request, "少なくとも 2 つの場所を指定してください")
+            return redirect(self.request.META.get('HTTP_REFERER'))
+
+        if len(land_candidates) > 10:
+            messages.error(self.request, "GooglemapAPIのレート上昇制約により 10 地点までしか計算できません")
+            return redirect(self.request.META.get('HTTP_REFERER'))
+
         entities = []
-        for land_candidate in land_candidate_service.parse_kml(kml_raw).list():
+        for land_candidate in land_candidates:
             coordinates_str = land_candidate.center.to_googlemapcoords().get_coords(to_str=True)
             entity = RouteSuggestImport.objects.create(name=land_candidate.name, coords=coordinates_str)
             entities.append(entity)
