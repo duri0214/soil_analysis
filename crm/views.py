@@ -310,7 +310,16 @@ class RouteSuggestSuccessView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['route_suggest_list'] = list(RouteSuggestImport.objects.all().order_by('ordering'))
-        context['coords_list'] = list(RouteSuggestImport.objects.all().order_by('ordering').values_list('coords', flat=True))
+        route_suggest_imports = RouteSuggestImport.objects.all().order_by('ordering')
+        company_list = []
+        land_list = []
+        for route_suggest_import in route_suggest_imports:
+            company_name, land_name = route_suggest_import.name.split(' - ')
+            company_list.append(company_name)
+            land_list.append({"name": land_name, "coords": route_suggest_import.coords})
+
+        context['company_list'] = company_list
+        context['land_list'] = land_list
+        context['coords_list'] = list(land["coords"] for land in land_list)
 
         return context
