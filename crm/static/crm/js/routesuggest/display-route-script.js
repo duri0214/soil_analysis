@@ -18,10 +18,10 @@ function initMap() {
 /**
  * @param coords_list
  * @param directionsService directionsService
- * @param display directionsRenderer
+ * @param directionsRenderer directionsRenderer
  * @see https://developers.google.com/maps/documentation/javascript/reference/directions?hl=ja#DirectionsRequest
  */
-function displayRoute(coords_list, directionsService, display) {
+function displayRoute(coords_list, directionsService, directionsRenderer) {
     directionsService
         .route({
             origin: coords_list.shift(),
@@ -32,7 +32,7 @@ function displayRoute(coords_list, directionsService, display) {
             optimizeWaypoints: true  // 地点最適化
         })
         .then((result) => {
-            display.setDirections(result);
+            directionsRenderer.setDirections(result);
         })
         .catch((e) => {
             alert("Could not display directions due to: " + e);
