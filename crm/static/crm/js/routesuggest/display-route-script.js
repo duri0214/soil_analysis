@@ -9,24 +9,24 @@ function initMap() {
     directionsRenderer.setMap(map);
 
     displayRoute(
-        route_suggest_list,
+        coords_list,
         directionsService,
         directionsRenderer,
     );
 }
 
 /**
- * @param route_suggest_list
+ * @param coords_list
  * @param service directionsService
  * @param display directionsRenderer
  * @see https://developers.google.com/maps/documentation/javascript/reference/directions?hl=ja#DirectionsRequest
  */
-function displayRoute(route_suggest_list, service, display) {
+function displayRoute(coords_list, service, display) {
     service
         .route({
-            origin: route_suggest_list.shift(),
-            destination: route_suggest_list.pop(),
-            waypoints: route_suggest_list.map(location => ({ location })),
+            origin: coords_list.shift(),
+            destination: coords_list.pop(),
+            waypoints: coords_list.map(location => ({ location })),
             travelMode: google.maps.TravelMode.DRIVING,
             avoidTolls: true,  // 有料道路を除外
             optimizeWaypoints: true  // 地点最適化

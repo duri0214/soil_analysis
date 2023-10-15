@@ -310,6 +310,7 @@ class RouteSuggestSuccessView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['route_suggest_list'] = list(RouteSuggestImport.objects.all().order_by('ordering').values_list('coords', flat=True))
+        context['route_suggest_list'] = list(RouteSuggestImport.objects.all().order_by('ordering'))
+        context['coords_list'] = list(RouteSuggestImport.objects.all().order_by('ordering').values_list('coords', flat=True))
 
         return context

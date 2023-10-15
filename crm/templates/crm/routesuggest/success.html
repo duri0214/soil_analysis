@@ -7,7 +7,7 @@
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <script type="module" src="{% static "crm/js/routesuggest/display-route-script.js" %}"></script>
     {% autoescape off %}
-        <script>let route_suggest_list = {{ route_suggest_list }};</script>
+        <script>let coords_list = {{ coords_list }};</script>
     {% endautoescape %}
 {% endblock %}
 {% block header %}
@@ -25,6 +25,12 @@
     <p>取り込んだルートを最適化して作業指示書を作成しました</p>
 
     <div id="map"></div>
+    <ul>
+        {% for land in route_suggest_list %}
+            <li id="{{ land.id }}" class="list-group-item">圃場名: {{ land.name }}, 座標: {{ land.coords }}</li>
+        {% endfor %}
+    </ul>
+
     <!--
       The `defer` attribute causes the callback to execute after the full HTML
       document has been parsed. For non-blocking uses, avoiding race conditions,
