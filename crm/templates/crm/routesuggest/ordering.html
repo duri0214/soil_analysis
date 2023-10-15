@@ -36,7 +36,7 @@
     <form id="orderForm" method="POST" action="{% url 'crm:routesuggest_ordering' %}">
         {% csrf_token %}
         <input type="hidden" id="orderData" name="order_data">
-        <button class="btn btn-outline-primary mb-3" type="submit">つぎへ</button>
+        <button class="btn btn-outline-primary mb-3" type="submit">送信</button>
     </form>
 
     <script>
