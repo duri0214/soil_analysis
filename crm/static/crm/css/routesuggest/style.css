@@ -1,6 +1,12 @@
-/*
- * マップを含む div 要素のサイズを定義するには、マップの高さを常に明示的に設定してください。
- */
-#map {
-  height: 400px;
+.flex-container {
+    display: flex;
+}
+
+.flex-item {
+    flex: 1;
+    margin-right: 10px; /* 適宜マージンを調整 */
+}
+
+.list-group {
+    flex: 1;
 }
