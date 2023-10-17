@@ -289,3 +289,14 @@ class SoilHardnessMeasurementImportErrors(models.Model):
     remark = models.TextField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(null=True)
+
+
+class RouteSuggestImport(models.Model):
+    """
+    KMLの圃場座標リストをいったん保存するテーブル
+    """
+    name = models.CharField(max_length=256)
+    coords = models.CharField(max_length=256)
+    ordering = models.IntegerField(null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(null=True)

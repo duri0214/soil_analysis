@@ -11,8 +11,10 @@ class GoogleMapCoords(BaseCoords):
         self.latitude = latitude
         self.longitude = longitude
 
-    def get_coords(self) -> Tuple[float, float]:
+    def get_coords(self, to_str: bool = False) -> Tuple[float, float] or str:
         """
         :return: latitude, longitude
         """
-        return self.latitude, self.longitude
+        coordinates_tuple = self.latitude, self.longitude
+        coordinates_str = f"{coordinates_tuple[0]}, {coordinates_tuple[1]}"
+        return coordinates_tuple if to_str is False else coordinates_str

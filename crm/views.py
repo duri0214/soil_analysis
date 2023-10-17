@@ -1,18 +1,22 @@
 import os
 import shutil
 
+from django.contrib import messages
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.management import call_command
 from django.db.models import Count
 from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, TemplateView, FormView
 
+from crm.domain.service.landcandidateservice import LandCandidateService
 from crm.domain.service.reports.reportlayout1 import ReportLayout1
 from crm.domain.repository.landrepository import LandRepository
 from crm.domain.service.zipfileservice import ZipFileService
-from crm.forms import CompanyCreateForm, LandCreateForm, UploadZipForm
+from crm.forms import CompanyCreateForm, LandCreateForm, UploadForm
 from crm.models import Company, Land, LandScoreChemical, LandReview, CompanyCategory, LandLedger, \
-    SoilHardnessMeasurementImportErrors, SoilHardnessMeasurement, LandBlock, SamplingOrder
+    SoilHardnessMeasurementImportErrors, SoilHardnessMeasurement, LandBlock, SamplingOrder, RouteSuggestImport
 
 
 class Home(TemplateView):
@@ -110,12 +114,12 @@ class LandReportChemicalListView(ListView):
 
 class SoilhardnessUploadView(FormView):
     template_name = 'crm/soilhardness/form.html'
-    form_class = UploadZipForm
+    form_class = UploadForm
     success_url = reverse_lazy('crm:soilhardness_success')
 
     def form_valid(self, form):
         # Zipを処理してバッチ実行
-        upload_folder = ZipFileService.handle_uploaded_zip(self.request.FILES['zipfile'])
+        upload_folder = ZipFileService.handle_uploaded_zip(self.request.FILES['file'])
         if os.path.exists(upload_folder):
             call_command('import_soil_hardness', upload_folder)
             shutil.rmtree(upload_folder)
@@ -243,16 +247,79 @@ class SoilhardnessAssociationSuccessView(TemplateView):
     template_name = 'crm/soilhardness/association/success.html'
 
 
-class RouteSuggestUploadView(TemplateView):
+class RouteSuggestUploadView(FormView):
     template_name = 'crm/routesuggest/form.html'
+    form_class = UploadForm
+    success_url = reverse_lazy('crm:routesuggest_ordering')
+
+    def form_valid(self, form):
+        """
+        Notes: Directions API の地点を制限する
+         可能であれば、クエリでのユーザー入力を最大 10 地点に制限します。10 を超える地点を含むリクエストは、課金レートが高くなります。
+         https://developers.google.com/maps/optimization-guide?hl=ja#routes
+        """
+        upload_file: InMemoryUploadedFile = self.request.FILES['file']
+        kml_raw = upload_file.read()
+        land_candidate_service = LandCandidateService()
+        land_candidates = land_candidate_service.parse_kml(kml_raw).list()
+
+        if len(land_candidates) < 2:
+            messages.error(self.request, "少なくとも 2 つの場所を指定してください")
+            return redirect(self.request.META.get('HTTP_REFERER'))
+
+        if len(land_candidates) > 10:
+            messages.error(self.request, "GooglemapAPIのレート上昇制約により 10 地点までしか計算できません")
+            return redirect(self.request.META.get('HTTP_REFERER'))
+
+        entities = []
+        for land_candidate in land_candidates:
+            coordinates_str = land_candidate.center.to_googlemapcoords().get_coords(to_str=True)
+            entity = RouteSuggestImport.objects.create(name=land_candidate.name, coords=coordinates_str)
+            entities.append(entity)
+        RouteSuggestImport.objects.all().delete()
+        RouteSuggestImport.objects.bulk_create(entities)
+
+        return super().form_valid(form)
+
+
+class RouteSuggestOrderingView(ListView):
+    model = RouteSuggestImport
+    template_name = "crm/routesuggest/ordering.html"
+
+    def post(self, request, *args, **kwargs):
+        order_data = self.request.POST.get('order_data')
+
+        try:
+            if order_data:
+                order_ids = order_data.split(",")
+                for order, order_id in enumerate(order_ids, start=1):
+                    route_suggest = RouteSuggestImport.objects.get(pk=order_id)
+                    route_suggest.ordering = order
+                    route_suggest.save()
+
+            messages.success(request, "Data updated successfully")
+            return redirect(reverse_lazy('crm:routesuggest_success'))
+
+        except RouteSuggestImport.DoesNotExist:
+            messages.error(request, "Invalid order data provided.")
+            return redirect(request.META.get('HTTP_REFERER'))
 
 
 class RouteSuggestSuccessView(TemplateView):
     template_name = 'crm/routesuggest/success.html'
-    # TODO:
-    #  step1: xarvioで任意の圃場をKMLダウンロード
-    #  step2: KMLをアップロードして圃場のリストを作る（名称ではgooglemapでdirectionできないから、座標でもいいのかな）
-    #   KMLを読む（未使用の）ロジックはあるね crm/tests/domain/service/test_landcandidateservice.py
-    #   ["B0", "B2", "B4", "C5", "そば2", "リヴァンプ2", "ローソン4", "伊佐地4", "湖東中4", "山崎開発1", "小澤農園", "上4", "東大山1"]
-    #  step3: success.html から呼ばれる gmap_direction に、出発地、経由地（最大８）、到着地で当て込む
-    #  step4: 作業指示書としての体裁を整える
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        route_suggest_imports = RouteSuggestImport.objects.all().order_by('ordering')
+        company_list = []
+        land_list = []
+        for route_suggest_import in route_suggest_imports:
+            company_name, land_name = route_suggest_import.name.split(' - ')
+            company_list.append(company_name)
+            land_list.append({"name": land_name, "coords": route_suggest_import.coords})
+
+        context['company_list'] = company_list
+        context['land_list'] = land_list
+        context['coords_list'] = list(land["coords"] for land in land_list)
+
+        return context

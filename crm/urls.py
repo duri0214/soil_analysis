@@ -23,5 +23,6 @@ urlpatterns = [
     path('soilhardness/association/success', views.SoilhardnessAssociationSuccessView.as_view(),
          name='soilhardness_association_success'),
     path('routesuggest/upload', views.RouteSuggestUploadView.as_view(), name='routesuggest_upload'),
+    path('routesuggest/ordering', views.RouteSuggestOrderingView.as_view(), name='routesuggest_ordering'),
     path('routesuggest/success', views.RouteSuggestSuccessView.as_view(), name='routesuggest_success')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
